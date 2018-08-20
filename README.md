@@ -1,1 +1,1 @@
-# jeu_echec
+# Jeu d'échec en python
