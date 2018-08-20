@@ -22,7 +22,6 @@ def affichePlateau():
             acc+=1
     print()
     print('  ',0,1,2,3,4,5,6,7)
-            
 
 
 def verifCoord(coordX,coordY):
@@ -39,61 +38,88 @@ def verifCoord(coordX,coordY):
         else:
             erreur=1
 
-def verifPiece(y,x):
-    if plateau[y][x].lower()=='p':
-        return 1
-    if plateau[y][x].lower()=='f':
-        return 2
-    if plateau[y][x].lower()=='q':
-        return 3
-    if plateau[y][x].lower()=='k':
-        return 4
-    if plateau[y][x].lower()=='c':
-        return 5
-    if plateau[y][x].lower()=='t':
-        return 6
-    return 0
+def verifCouleur(y,x):
+    if plateau[y][x].islower():
+        return 'noir'
+    return 'blanc'
     
+def verifPiece(y,x):
+    if plateau[y][x].lower()=='p':#pion
+        return 1
+    if plateau[y][x].lower()=='f':#fou
+        return 2
+    if plateau[y][x].lower()=='q':#reine
+        return 3    
+    if plateau[y][x].lower()=='k':#roi
+        return 4
+    if plateau[y][x].lower()=='c':#cavalier
+        return 5
+    if plateau[y][x].lower()=='t':#tour
+        return 6
+    return 0    #case vide
+
 #y1 = x1
 #y2 = x2
 def pion(y1,x1,y2,x2):
-    if  y1==6 and y1==y2+2 and verifPiece(y2,x2)==0:#Avancer de 2 noir
+    if y1==6 and y1==y2+2 and verifPiece(y2,x2)==0:#Avancer de 2 noir
         tmp=plateau[y1][x1]
         plateau[y1][x1]='.'
         plateau[y2][x2]=tmp
         return affichePlateau()
-    if y1==1 and y1==y2-2 and verifPiece(y2,x2)==0:#Avancer de 2 blanc
+    elif y1==1 and y1==y2-2 and verifPiece(y2,x2)==0:#Avancer de 2 blanc
         tmp=plateau[y1][x1]
         plateau[y1][x1]='.'
         plateau[y2][x2]=tmp
         return affichePlateau()
-    if x1 == x2-1 and y2 == y1 and verifPiece(y2,x2) == 0:#Avancer de 1
+    elif x1 == x2-1 and y2 == y1 and verifPiece(y2,x2) == 0:#Avancer de 1
         tmp=plateau[y1][x1]
         plateau[y1][x1]='.'
         plateau[y2][x2]=tmp
         return affichePlateau()
-    if verifPiece(y2,x2)!= 0 and x1+1==x2 and y2==y1+1 or y2==y1-1 and y1-1>0 and y1+1<8 and x1+1<8:#Manger piece
+    elif verifPiece(y2,x2)!= 0 and x1+1==x2 and y2==y1+1 or y2==y1-1 and y1-1>=0 and y1+1<8 and x1+1<8:#Manger piece
         tmp=plateau[y1][x1]
         plateau[y1][x1]='.'
         plateau[y2][x2]=tmp
         return affichePlateau()
     else :
-        print('Impossible')
-    
-        
-        
-##def fou():
-##
-##def reine():
-##
-##def roi():
-##
-##def cavalier():
-##
-##def tour():
-##
-##
-##
-##def main():
+        return 'Impossible'
+          
+def fou(y1,x1,y2,x2):
+    verifY=y1
+    verifX=x1
+    if x2<x1:#Monter
+        while verifY != y2 and verifX != x2:
+            if y1>y2 and verifPiece(verifY,verifX)==0:#monter gauche
+                verifY-=1
+                verifX-=1
+            elif y1<y2 and verifPiece(verifY,verifX)==0:#monter droite
+                verifY-=1
+                verifX+=1
+            elif verifPiece(verifY,verifX)!=0 :
+                return 'Impossible'
+    elif x2>x1:#Descendre
+        while verifY != y2 and verifX != x2:
+            if verifPiece(verifY,verifX)==0:#descendre droite
+                verifY+=1
+                verifX+=1
+            elif verifPiece(verifY,verifX)==0:
+                verifY-=1
+                verifX+=1
+            elif verifPiece(verifY,verifX)!=0:
+                return 'Impossible'
+    tmp=plateau[y1][x1]
+    plateau[y1][x1]='.'
+    plateau[y2][x2]=tmp
+#def reine():
+#
+#def roi():
+#
+#def cavalier():
+#
+#def tour():
+#
+#
+#
+#def main():
 
 affichePlateau()
