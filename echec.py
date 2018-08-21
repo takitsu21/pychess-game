@@ -61,6 +61,9 @@ def verifPiece(y,x):
 #y1 = x1
 #y2 = x2
 def pion(y1,x1,y2,x2):
+    if y1<0 or x1<0 or y2<0 or x2<0:
+        affichePlateau()
+        return 'Impossible'
     if y1==6 and y1==y2+2 and verifPiece(y2,x2)==0:#Avancer de 2 noir
         tmp=plateau[y1][x1]
         plateau[y1][x1]='.'
@@ -87,29 +90,34 @@ def pion(y1,x1,y2,x2):
 def fou(y1,x1,y2,x2):
     verifY=y1
     verifX=x1
-    if x2<x1:#Monter
+    if x2<x1 and verifPiece(verifY-1,verifX-1)==0 or verifPiece(verifY-1,verifX+1)==0:#Monter
         while verifY != y2 and verifX != x2:
-            if y1>y2 and verifPiece(verifY,verifX)==0:#monter gauche
+            if y1>y2 and verifPiece(verifY-1,verifX-1)==0:#monter gauche
                 verifY-=1
                 verifX-=1
-            elif y1<y2 and verifPiece(verifY,verifX)==0:#monter droite
+            elif y1<y2 and verifPiece(verifY-1,verifX+1)==0:#monter droite
                 verifY-=1
                 verifX+=1
             elif verifPiece(verifY,verifX)!=0 :
                 return 'Impossible'
-    elif x2>x1:#Descendre
+    else:#Descendre
         while verifY != y2 and verifX != x2:
-            if verifPiece(verifY,verifX)==0:#descendre droite
+            if y2>y1 and verifPiece(verifY+1,verifX+1)==0:#descendre droite
                 verifY+=1
                 verifX+=1
-            elif verifPiece(verifY,verifX)==0:
+            elif y2<y1 and verifPiece(verifY-1,verifX+1)==0:#descendre gauche
                 verifY-=1
                 verifX+=1
-            elif verifPiece(verifY,verifX)!=0:
+            elif verifPiece(verifY,verifX)!=0:          
                 return 'Impossible'
-    tmp=plateau[y1][x1]
-    plateau[y1][x1]='.'
-    plateau[y2][x2]=tmp
+    print(verifY,verifX)
+    if verifPiece(y2,x2) == 0 and verifY==y2 and verifX==x2:
+        tmp=plateau[y1][x1]
+        plateau[y1][x1]='.'
+        plateau[y2][x2]=tmp
+    else:
+        return 'impossible'
+    affichePlateau()
 #def reine():
 #
 #def roi():
