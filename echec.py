@@ -1,5 +1,13 @@
+# -*- coding: utf-8 -*-
 #! /usr/bin/env python3
-# coding: utf-8
+
+"""
+Created on Wed Aug 22 00:31:34 2018
+
+@author: Ralagane,Taki
+"""
+
+
 plateau=[['t', 'c', 'f', 'k', 'q', 'f', 'c', 't'],
  ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
  ['.', '.', '.', '.', '.', '.', '.','.'] ,
@@ -10,6 +18,7 @@ plateau=[['t', 'c', 'f', 'k', 'q', 'f', 'c', 't'],
  ['T', 'C', 'F', 'K', 'Q', 'F', 'C', 'T']]
 
 def affichePlateau():
+    print()
     acc=1
     print(0,end='  ')
     for i in range(8):
@@ -28,7 +37,7 @@ def verifCoord(coordX,coordY):
     erreur=0
     while erreur == 0:
         if type(coordX) != int or type(coordY) != int:
-            print('Coordonées incorrecte, ressaisissez les coordonnées:')
+            print('Coordonées sont des entiers, ressaisissez les coordonnées:')
             coordY=input('Coordonnée x: ')
             coordX=input('Coordonnée y: ')
         elif int(coordY) < 0 or int(coordY) > 8 or int(coordX) < 0 or int(coordX) > 8:
@@ -37,6 +46,7 @@ def verifCoord(coordX,coordY):
             coordX=input('Coordonnée y: ')
         else:
             erreur=1
+    executerFonctionPiece(coordX,coordY)
 
 def verifCouleur(y,x):
     if plateau[y][x].islower():
@@ -118,16 +128,40 @@ def fou(y1,x1,y2,x2):
     else:
         return 'impossible'
     affichePlateau()
-#def reine():
-#
-#def roi():
-#
-#def cavalier():
-#
-#def tour():
-#
-#
-#
-#def main():
+def reine():
+    return "slt g des boobs"
+def roi():
+    return "slt c le roi"
+def cavalier():
+    return "slt c le cavalier"
+def tour():
+    return "slt c la tour"
 
-affichePlateau()
+
+
+def executerFonctionPiece(y,x):
+    if verifPiece(y,x) == 1:
+        pion(y,x)
+    elif verifPiece(y,x) == 2:
+        fou(y,x)
+    elif verifPiece(y,x) == 3:
+        reine(y,x)
+    elif verifPiece(y,x) == 4:
+        roi(y,x)
+    elif verifPiece(y,x) == 5:
+        cavalier(y,x)
+    elif verifPiece(y,x) == 6:
+        tour(y,x)
+    print("Il n'y a pas de pièce à cet emplacement")    
+
+def partie():
+    continuer =0
+    affichePlateau()
+    while continuer ==0:
+        print("Saissisez les coordonnées :")
+        coordY=input('Coordonnée x: ')
+        coordX=input('Coordonnée y: ')
+        verifCoord(coordY,coordX)
+        
+partie()      
+    
