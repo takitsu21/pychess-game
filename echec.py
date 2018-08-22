@@ -32,21 +32,20 @@ def affichePlateau():
     print()
     print('  ',0,1,2,3,4,5,6,7)
 
-
 def verifCoord(coordX,coordY):
     erreur=0
     while erreur == 0:
         if type(coordX) != int or type(coordY) != int:
-            print('Coordonées sont des entiers, ressaisissez les coordonnées:')
+            print('Les coordonnées doivent être des entiers, ressaisissez les coordonnées:')
             coordY=input('Coordonnée x: ')
             coordX=input('Coordonnée y: ')
+            print(type(coordX))
         elif int(coordY) < 0 or int(coordY) > 8 or int(coordX) < 0 or int(coordX) > 8:
             print('Coordonées incorrecte, ressaisissez les coordonnées:')
             coordY=input('Coordonnée x: ')
             coordX=input('Coordonnée y: ')
         else:
             erreur=1
-    executerFonctionPiece(coordX,coordY)
 
 def verifCouleur(y,x):
     if plateau[y][x].islower():
@@ -70,64 +69,65 @@ def verifPiece(y,x):
 
 #y1 = x1
 #y2 = x2
-def pion(y1,x1,y2,x2):
+def pion(x1,y1,x2,y2):
     if y1<0 or x1<0 or y2<0 or x2<0:
-        affichePlateau()
         return 'Impossible'
     if y1==6 and y1==y2+2 and verifPiece(y2,x2)==0:#Avancer de 2 noir
         tmp=plateau[y1][x1]
         plateau[y1][x1]='.'
         plateau[y2][x2]=tmp
-        return affichePlateau()
     elif y1==1 and y1==y2-2 and verifPiece(y2,x2)==0:#Avancer de 2 blanc
         tmp=plateau[y1][x1]
         plateau[y1][x1]='.'
         plateau[y2][x2]=tmp
-        return affichePlateau()
     elif x1 == x2-1 and y2 == y1 and verifPiece(y2,x2) == 0:#Avancer de 1
         tmp=plateau[y1][x1]
         plateau[y1][x1]='.'
         plateau[y2][x2]=tmp
-        return affichePlateau()
     elif verifPiece(y2,x2)!= 0 and x1+1==x2 and y2==y1+1 or y2==y1-1 and y1-1>=0 and y1+1<8 and x1+1<8:#Manger piece
         tmp=plateau[y1][x1]
         plateau[y1][x1]='.'
         plateau[y2][x2]=tmp
-        return affichePlateau()
     else :
         return 'Impossible'
-          
-def fou(y1,x1,y2,x2):
-    verifY=y1
-    verifX=x1
-    if x2<x1 and verifPiece(verifY-1,verifX-1)==0 or verifPiece(verifY-1,verifX+1)==0:#Monter
-        while verifY != y2 and verifX != x2:
-            if y1>y2 and verifPiece(verifY-1,verifX-1)==0:#monter gauche
-                verifY-=1
+        
+def fou(x1,y1,x2,y2):
+    verifX=y1
+    verifY=x1
+    if y1<0 or x1<0 or y2<0 or x2<0 or y1>8 or x1>8 or y2>8 or x2>8:
+        return 'impossible'
+    if y1>y2 and verifPiece(verifX-1,verifY-1)==0 or verifPiece(verifX+1,verifY-1)==0:#Monter
+        while verifX != y2 and verifY != x2:
+            if x1>x2 and verifPiece(verifX-1,verifY-1)==0:#monter gauche
                 verifX-=1
-            elif y1<y2 and verifPiece(verifY-1,verifX+1)==0:#monter droite
                 verifY-=1
-                verifX+=1
-            elif verifPiece(verifY,verifX)!=0 :
-                return 'Impossible'
-    else:#Descendre
-        while verifY != y2 and verifX != x2:
-            if y2>y1 and verifPiece(verifY+1,verifX+1)==0:#descendre droite
+                print('haut gauche')
+            elif x1<x2 and verifPiece(verifX-1,verifY+1)==0 :#monter droite
+                verifX-=1
                 verifY+=1
-                verifX+=1
-            elif y2<y1 and verifPiece(verifY-1,verifX+1)==0:#descendre gauche
-                verifY-=1
-                verifX+=1
-            elif verifPiece(verifY,verifX)!=0:          
+                print('haut droite')
+            elif verifPiece(verifX,verifY)!=0 :
                 return 'Impossible'
-    print(verifY,verifX)
-    if verifPiece(y2,x2) == 0 and verifY==y2 and verifX==x2:
+    if y1<y2:#Descendre
+        while verifX != y2 and verifY != x2:
+            if y2>y1 and verifPiece(verifX+1,verifY+1)==0:#descendre droite
+                verifX+=1
+                verifY+=1
+                print('descend droite')
+            elif y2<y1 and verifPiece(verifX-1,verifY+1)==0:#descendre gauche
+                verifX-=1
+                verifY+=1
+                print('descend gauche')
+            elif verifPiece(verifX,verifY)!=0:          
+                return 'Impossible'
+    if verifPiece(y2,x2) == 0:
         tmp=plateau[y1][x1]
         plateau[y1][x1]='.'
         plateau[y2][x2]=tmp
     else:
         return 'impossible'
     affichePlateau()
+
 def reine():
     return "slt g des boobs"
 def roi():
@@ -137,31 +137,43 @@ def cavalier():
 def tour():
     return "slt c la tour"
 
-
-
-def executerFonctionPiece(y,x):
-    if verifPiece(y,x) == 1:
-        pion(y,x)
-    elif verifPiece(y,x) == 2:
-        fou(y,x)
-    elif verifPiece(y,x) == 3:
-        reine(y,x)
-    elif verifPiece(y,x) == 4:
-        roi(y,x)
-    elif verifPiece(y,x) == 5:
-        cavalier(y,x)
-    elif verifPiece(y,x) == 6:
-        tour(y,x)
-    print("Il n'y a pas de pièce à cet emplacement")    
+def executerFonctionPiece(x1,y1,x2,y2):
+    if verifPiece(y1,x1) == 1:
+        pion(x1,y1,x2,y2)
+        return
+    elif verifPiece(y1,x1) == 2:
+        fou(x1,y1,x2,y2)
+        affichePlateau()
+    elif verifPiece(y1,x1) == 3:
+        reine(y1,x1,y2,x2)
+        affichePlateau()
+    elif verifPiece(y1,x1) == 4:
+        roi(y1,x1,y2,x2)
+        affichePlateau()
+    elif verifPiece(y1,x1) == 5:
+        cavalier(y1,x1,y2,x2)
+        affichePlateau()
+    elif verifPiece(y1,x1) == 6:
+        tour(y1,x1,y2,x2)
+        affichePlateau()
+    else:
+        print("Il n'y a pas de pièce à cet emplacement")
 
 def partie():
-    continuer =0
+    global x1
+    global x2
+    global x2
+    global y2
     affichePlateau()
-    while continuer ==0:
+    while True:
         print("Saissisez les coordonnées :")
-        coordY=input('Coordonnée x: ')
-        coordX=input('Coordonnée y: ')
-        verifCoord(coordY,coordX)
-        
-partie()      
-    
+        try:
+            print('Coordonnée x de départ: ',end=' ');x1=int(input())
+            print('Coordonnée y de départ: ',end=' ');y1=int(input())
+            print('Coordonnée x2 d\'arrivé: ',end=' ');x2=int(input())
+            print('Coordonnée y2 d\'arrivé: ',end=' ');y2=int(input())
+            executerFonctionPiece(x1,y1,x2,y2)
+            affichePlateau()
+        except:
+            continue     
+partie()   
