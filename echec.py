@@ -6,7 +6,7 @@ Created on Wed Aug 22 00:31:34 2018
 
 @author: Ralagane,Taki
 """
-
+global continuerPartie
 
 plateau=[['t', 'c', 'f', 'k', 'q', 'f', 'c', 't'],
  ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
@@ -17,6 +17,7 @@ plateau=[['t', 'c', 'f', 'k', 'q', 'f', 'c', 't'],
  ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
  ['T', 'C', 'F', 'K', 'Q', 'F', 'C', 'T']]
 
+#Affiche le plateau dans le terminal.
 def affichePlateau():
     print()
     acc=1
@@ -32,26 +33,31 @@ def affichePlateau():
     print()
     print('  ',0,1,2,3,4,5,6,7)
 
+
+#Permet de vérifier si les coordonnées sont bien dans l'échiquier. Demande aussi à l'utilisateur de les saisir.
 def verifCoord(coordX,coordY):
     erreur=0
-    while erreur == 0:
+    while erreur == 0: 
         if type(coordX) != int or type(coordY) != int:
-            print('Les coordonnées doivent être des entiers, ressaisissez les coordonnées:')
+            print(' Les coordonées ne sont pas des entiers, saissisez des nombres entre 0 et 7:')
             coordY=input('Coordonnée x: ')
             coordX=input('Coordonnée y: ')
-            print(type(coordX))
         elif int(coordY) < 0 or int(coordY) > 8 or int(coordX) < 0 or int(coordX) > 8:
             print('Coordonées incorrecte, ressaisissez les coordonnées:')
             coordY=input('Coordonnée x: ')
             coordX=input('Coordonnée y: ')
         else:
             erreur=1
-
+    return True
+#Determine la couleur de la pièce dans des coordonnées précis. Renvoie la couleur 'vide' quand il n'y a pas de pièce.
 def verifCouleur(y,x):
     if plateau[y][x].islower():
         return 'noir'
+    elif  plateau[y][x] == ".":
+        return 'vide'
     return 'blanc'
     
+#Donne le type de la pièce à des coordonnées précis.
 def verifPiece(y,x):
     if plateau[y][x].lower()=='p':#pion
         return 1
@@ -67,9 +73,8 @@ def verifPiece(y,x):
         return 6
     return 0    #case vide
 
-#y1 = x1
-#y2 = x2
-def pion(x1,y1,x2,y2):
+#Permet de faire bouger le pion. N'exécute pas pour le moment la prise en passant.
+def pion(y1,x1,y2,x2):
     if y1<0 or x1<0 or y2<0 or x2<0:
         return 'Impossible'
     if y1==6 and y1==y2+2 and verifPiece(y2,x2)==0:#Avancer de 2 noir
@@ -90,7 +95,8 @@ def pion(x1,y1,x2,y2):
         plateau[y2][x2]=tmp
     else :
         return 'Impossible'
-        
+          
+#Permet d'utiliser le fou.
 def fou(x1,y1,x2,y2):
     verifX=y1
     verifY=x1
@@ -134,46 +140,100 @@ def roi():
     return "slt c le roi"
 def cavalier():
     return "slt c le cavalier"
-def tour():
-    return "slt c la tour"
 
-def executerFonctionPiece(x1,y1,x2,y2):
-    if verifPiece(y1,x1) == 1:
-        pion(x1,y1,x2,y2)
+#Permet de faire bouger la tour en respectant les contraintes. Ne fait pas le roc.
+def tour(y1,x1,y2,x2):    
+    if y1==y2 or x1==x2: #On regarde d'abord si le déplacement correspond à celle d'une tour   
+        if verifCouleur(y1,x1) ==verifCouleur(y2,x2)  :#On regarde ensuite si la pièce dans les coord d'arrivées est une alliée
+            print ("Vous tentez de capturer une pièce alliée, ce qui est impossible évidemment.")
+            return
+        if y1 == y2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and x2>x1:#Déplacement de gauche à droite avec prise de pièce enemie
+           for i in range(x2-x1):
+               if verifCoord((y1+i),(x1+i)) !=0 and y1+i != y1 and x1+i !=x1:
+                   print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
+                   return 
+               tmp=plateau[y1][x1]
+               plateau[y1][x1]='.'
+               plateau[y2][x2]=tmp
+        if y1==y2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and x2 <x1:#Déplacement de droite à gauche avec prise de pièce enemie
+            for i in range (x1-x2):
+                if verifCoord((y1+i),(x1+i)) !=0 and y1+i != y1 and x1+i !=x1:
+                    print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
+                    return 
+            tmp=plateau[y1][x1]
+            plateau[y1][x1]='.'
+            plateau[y2][x2]=tmp
+        if x1==x2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and y2>y1:#Déplacement du haut vers le bas avec prise de pièce enemie
+            for i in range (y2-y1):
+                if verifCoord((y1+i),(x1+i)) !=0 and y1+i != y1 and x1+i !=x1:
+                    print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
+                    return 
+            tmp=plateau[y1][x1]
+            plateau[y1][x1]='.'
+            plateau[y2][x2]=tmp
+        if x1==x2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and y1>y2:#Déplacement du bas vers le haut avec prise de pièce enemie
+            for i in range (y1-y2):
+                if verifCoord((y1+i),(x1+i)) !=0 and y1+i != y1 and x1+i !=x1:
+                    print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
+                    return 
+            tmp=plateau[y1][x1]
+            plateau[y1][x1]='.'
+            plateau[y2][x2]=tmp
+    else:
+        print("Le coordonées données ne respectent pas les caractéristiques de la tour : la tour se déplace soit horizontalement ou verticalement.")
         return
-    elif verifPiece(y1,x1) == 2:
-        fou(x1,y1,x2,y2)
-        affichePlateau()
-    elif verifPiece(y1,x1) == 3:
-        reine(y1,x1,y2,x2)
-        affichePlateau()
-    elif verifPiece(y1,x1) == 4:
-        roi(y1,x1,y2,x2)
-        affichePlateau()
-    elif verifPiece(y1,x1) == 5:
-        cavalier(y1,x1,y2,x2)
-        affichePlateau()
-    elif verifPiece(y1,x1) == 6:
-        tour(y1,x1,y2,x2)
-        affichePlateau()
+
+#Permet de faire appel aux bonnes fonctions quand le joueur souhaite bouger une pièce.
+def executerFonctionPiece(y,x,y1,x1):
+    if verifPiece(y,x) == 1:
+        print ("le Pion a été selectionné.")
+        pion(y,x,y1,x1)
+    elif verifPiece(y,x) == 2:
+        print ("le Fou a été selectionné.")
+        fou(y,x,y1,x1)
+    elif verifPiece(y,x) == 3:
+        print ("la Reine a été selectionnée.")
+        reine(y,x,y1,x1)
+    elif verifPiece(y,x) == 4:
+        print ("le Roi a été selectionné.")
+        roi(y,x,y1,x1)
+    elif verifPiece(y,x) == 5:
+        print ("le Cavalier a été selectionné.")
+        cavalier(y,x,y1,x1)
+    elif verifPiece(y,x) == 6:
+        print ("la Tour a été selectionnée.")
+        tour(y,x,y1,x1)
     else:
         print("Il n'y a pas de pièce à cet emplacement")
 
+
+#La fonction principale : elle gère la partie.
 def partie():
-    global x1
-    global x2
-    global x2
-    global y2
+    tour = 'Blanc'
+    continuerPartie= 'Oui'
+    print ("Bienvenue dans ce petit jeu d\'échec")
+    print
+    print ("Les blancs commencent.")
     affichePlateau()
-    while True:
-        print("Saissisez les coordonnées :")
-        try:
-            print('Coordonnée x de départ: ',end=' ');x1=int(input())
-            print('Coordonnée y de départ: ',end=' ');y1=int(input())
-            print('Coordonnée x2 d\'arrivé: ',end=' ');x2=int(input())
-            print('Coordonnée y2 d\'arrivé: ',end=' ');y2=int(input())
-            executerFonctionPiece(x1,y1,x2,y2)
-            affichePlateau()
-        except:
-            continue     
-partie()   
+    while continuerPartie == 'Oui':
+        print ('Saissisez les coordonnées de départ (ou saissisez les coordonnées -1 -1 pour vous arrêter)')
+        coordY=input('Coordonnée x: ')
+        coordX=input('Coordonnée y: ')
+        if int(coordY) == (-1) and int(coordX) ==(-1):
+            print ("fin de partie")
+            return
+        if verifCoord(int(coordY),int(coordX)) == True:
+            print("Saissisez les coordonnées d'arrivées (ou saissisez les coordonnées -1 -1 pour vous arrêter) :")
+            coordY1=input('Coordonnée x: ')
+            coordX1=input('Coordonnée y: ')
+            if int(coordY) == (-1) and int(coordX) ==(-1):
+                print ("fin de partie")
+                return
+            if verifCoord(int(coordY1),int(coordX1)) == True:
+                executerFonctionPiece(int(coordY),int(coordX),int(coordY1),int(coordX1))
+        affichePlateau()
+
+            
+        
+partie()         
+        
