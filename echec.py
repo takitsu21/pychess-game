@@ -206,7 +206,7 @@ def executerFonctionPiece(y,x,y1,x1):
     else:
         print("Il n'y a pas de pièce à cet emplacement")
 
-
+#Permet de faire bouger les pièces.
 def executionDeLaPartie(coordY,coordX):
     if int(coordY) == (-1) and int(coordX) ==(-1):
         print ("fin de partie")
