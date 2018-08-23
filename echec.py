@@ -52,10 +52,10 @@ def verifCoord(coordX,coordY):
 #Determine la couleur de la pièce dans des coordonnées précis. Renvoie la couleur 'vide' quand il n'y a pas de pièce.
 def verifCouleur(y,x):
     if plateau[y][x].islower():
-        return 'noir'
+        return 'Noir'
     elif  plateau[y][x] == ".":
-        return 'vide'
-    return 'blanc'
+        return 'Vide'
+    return 'Blanc'
     
 #Donne le type de la pièce à des coordonnées précis.
 def verifPiece(y,x):
@@ -207,30 +207,51 @@ def executerFonctionPiece(y,x,y1,x1):
         print("Il n'y a pas de pièce à cet emplacement")
 
 
+def executionDeLaPartie(coordY,coordX):
+    if int(coordY) == (-1) and int(coordX) ==(-1):
+        print ("fin de partie")
+        return 1
+    if verifCoord(int(coordY),int(coordX)) == True:
+        print("Saissisez les coordonnées d'arrivées (ou saissisez les coordonnées -1 -1 pour vous arrêter) :")
+        coordY1=input('Coordonnée x: ')
+        coordX1=input('Coordonnée y: ')
+    if int(coordY) == (-1) and int(coordX) ==(-1):
+        print ("fin de partie")
+        return 1
+    if verifCoord(int(coordY1),int(coordX1)) == True:
+        executerFonctionPiece(int(coordY),int(coordX),int(coordY1),int(coordX1))
+    
+
 #La fonction principale : elle gère la partie.
 def partie():
     tour = 'Blanc'
     continuerPartie= 'Oui'
     print ("Bienvenue dans ce petit jeu d\'échec")
-    print
+    
     print ("Les blancs commencent.")
     affichePlateau()
     while continuerPartie == 'Oui':
         print ('Saissisez les coordonnées de départ (ou saissisez les coordonnées -1 -1 pour vous arrêter)')
         coordY=input('Coordonnée x: ')
         coordX=input('Coordonnée y: ')
-        if int(coordY) == (-1) and int(coordX) ==(-1):
-            print ("fin de partie")
-            return
-        if verifCoord(int(coordY),int(coordX)) == True:
-            print("Saissisez les coordonnées d'arrivées (ou saissisez les coordonnées -1 -1 pour vous arrêter) :")
-            coordY1=input('Coordonnée x: ')
-            coordX1=input('Coordonnée y: ')
-            if int(coordY) == (-1) and int(coordX) ==(-1):
-                print ("fin de partie")
+        if verifCouleur(int(coordY),int(coordX)) == 'Blanc' and tour =='Blanc':
+            if executionDeLaPartie(int(coordY),int(coordX)) !=1:
+                print ("c\'est au tour des noirs.")
+                tour ='Noir'
+            else:
                 return
-            if verifCoord(int(coordY1),int(coordX1)) == True:
-                executerFonctionPiece(int(coordY),int(coordX),int(coordY1),int(coordX1))
+        elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Blanc' :
+            print ("C\'est impossible, les blancs doivent jouer se tour.")
+        elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Noir':
+            if executionDeLaPartie(int(coordY),int(coordX)) !=1:
+                print ("c\'est au tour des Blancs.")
+                tour = 'Blanc'
+            else:
+                return
+        elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Blanc':
+            print ("C\'est impossible, les noirs doivent jouer se tour.")
+        elif verifCouleur(int(coordY),int(coordX)) == 'Vide':
+            print ("La case est vide, choissisez une pièce.")
         affichePlateau()
 
             
