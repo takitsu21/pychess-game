@@ -87,42 +87,97 @@ def pion(y1,x1,y2,x2):
     return 0
           
 #Permet d'utiliser le fou.
-def fou(x1,y1,x2,y2):
+def fou(y1,x1,y2,x2):
     verifX=y1
     verifY=x1
-    if y1<0 or x1<0 or y2<0 or x2<0 or y1>8 or x1>8 or y2>8 or x2>8:
-        return 'impossible'
-    if y1>y2 and verifPiece(verifX-1,verifY-1)==0 or verifPiece(verifX+1,verifY-1)==0:#Monter
-        while verifX != y2 and verifY != x2:
-            if x1>x2 and verifPiece(verifX-1,verifY-1)==0:#monter gauche
-                verifX-=1
-                verifY-=1
-                print('haut gauche')
-            elif x1<x2 and verifPiece(verifX-1,verifY+1)==0 :#monter droite
-                verifX-=1
-                verifY+=1
-                print('haut droite')
-            elif verifPiece(verifX,verifY)!=0 :
-                return 'Impossible'
-    if y1<y2:#Descendre
-        while verifX != y2 and verifY != x2:
-            if y2>y1 and verifPiece(verifX+1,verifY+1)==0:#descendre droite
-                verifX+=1
-                verifY+=1
-                print('descend droite')
-            elif y2<y1 and verifPiece(verifX-1,verifY+1)==0:#descendre gauche
-                verifX-=1
-                verifY+=1
-                print('descend gauche')
-            elif verifPiece(verifX,verifY)!=0:          
-                return 'Impossible'
-    if verifPiece(y2,x2) == 0:
-        tmp=plateau[y1][x1]
-        plateau[y1][x1]='.'
-        plateau[y2][x2]=tmp
-    else:
-        return 'impossible'
-    affichePlateau()
+    if verifCoord(y2,x2):
+        if verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2):#Manger
+            if y1>y2:
+                while True:
+                    if x1>x2 and verifPiece(verifX-1,verifY-1)==0:#monter gauche
+                        verifX-=1
+                        verifY-=1
+                        if verifPiece(verifX-1,verifY-1)==0 :
+                            if verifPiece(verifX-2,verifY-2)!=0:
+                                tmp=plateau[y1][x1]
+                                plateau[y1][x1]='.'
+                                plateau[y2][x2]=tmp
+                                return 1
+                            tmp=plateau[y1][x1]
+                            plateau[y1][x1]='.'
+                            plateau[y2][x2]=tmp
+                            return 1   
+                    elif x1<x2 and verifPiece(verifX-1,verifY+1)==0 :#monter droite
+                        verifX-=1
+                        verifY+=1
+                        if verifPiece(verifX-1,verifY+1)==0:
+                            if verifPiece(verifX-2,verifY+2)!=0:
+                                tmp=plateau[y1][x1]
+                                plateau[y1][x1]='.'
+                                plateau[y2][x2]=tmp
+                                return 1
+                            tmp=plateau[y1][x1]
+                            plateau[y1][x1]='.'
+                            plateau[y2][x2]=tmp
+                            return 1                      
+            if y1<y2:#Descendre
+                while True:
+                    if y2>y1 and verifPiece(verifX+1,verifY+1)==0:#descendre droite
+                        verifX+=1
+                        verifY+=1
+                        if verifPiece(verifX+1,verifY+1)==0:
+                            if verifPiece(verifX+2,verifY+2)!=0:
+                                tmp=plateau[y1][x1]
+                                plateau[y1][x1]='.'
+                                plateau[y2][x2]=tmp
+                                return 1
+                            tmp=plateau[y1][x1]
+                            plateau[y1][x1]='.'
+                            plateau[y2][x2]=tmp
+                            return 1                       
+                    elif y2<y1 and verifPiece(verifX-1,verifY+1)==0:#descendre gauche
+                        verifX-=1
+                        verifY+=1
+                        if verifPiece(verifX-1,verifY+1)==0:
+                            if verifPiece(verifX-2,verifY+2)!=0:
+                                tmp=plateau[y1][x1]
+                                plateau[y1][x1]='.'
+                                plateau[y2][x2]=tmp
+                                return 1
+                            tmp=plateau[y1][x1]
+                            plateau[y1][x1]='.'
+                            plateau[y2][x2]=tmp
+                            return 1                    
+        else:
+            if y1>y2 and verifPiece(verifX-1,verifY-1)==0 or verifPiece(verifX+1,verifY-1)==0:#Monter
+                while verifX != y2 and verifY != x2:
+                    if x1>x2 and verifPiece(verifX-1,verifY-1)==0:#monter gauche
+                        verifX-=1
+                        verifY-=1
+                    elif x1<x2 and verifPiece(verifX-1,verifY+1)==0 :#monter droite
+                        verifX-=1
+                        verifY+=1
+                    elif verifPiece(verifX,verifY)!=0 :
+                        return 0
+                tmp=plateau[y1][x1]
+                plateau[y1][x1]='.'
+                plateau[y2][x2]=tmp
+                return 1
+            if y1<y2:#Descendre
+                while verifX != y2 and verifY != x2:
+                    if y2>y1 and verifPiece(verifX+1,verifY+1)==0:#descendre droite
+                        verifX+=1
+                        verifY+=1
+                    elif y2<y1 and verifPiece(verifX-1,verifY+1)==0:#descendre gauche
+                        verifX-=1
+                        verifY+=1
+                    elif verifPiece(verifX,verifY)!=0:          
+                        return 0
+                tmp=plateau[y1][x1]
+                plateau[y1][x1]='.'
+                plateau[y2][x2]=tmp
+                return 1
+    return 0
 
 def reine():
     return "slt g des boobs"
