@@ -126,8 +126,34 @@ def fou(x1,y1,x2,y2):
 
 def reine():
     return "slt g des boobs"
-def roi():
-    return "slt c le roi"
+def roi(y1,x1,y2,x2):
+    if verifCouleur(y1,x1) ==verifCouleur(y2,x2)  :#On regarde ensuite si la pièce dans les coord d'arrivées est une alliée
+            print ("Vous tentez de capturer une pièce alliée, ce qui est impossible évidemment.")
+            return 0
+    if x1==x2 and y2 >y1 and y2-1 ==y1 : #déplacement de gauche à droite
+        for i in range((7-y2)+2): #vérification à droite du roi
+            if verifPiece(y1+i,x1) =="q" and verifCouleur(y1+i,x1) != verifCouleur(y1,x1): 
+                print("Le roi ne peut se déplacer, car la reine restraint ses déplacements.")
+                return 0
+            if verifPiece(y1+i,x1) =="t" and verifCouleur(y1+i,x1) != verifCouleur(y1,x1):
+                print("Le roi ne peut se déplacer, car la tour restraint ses déplacements.")
+                return 0
+        for i in range (y1+1): #vérification à gauche du roi
+             if verifPiece(y1-i,x1) =="q" and verifCouleur(y1+i,x1) != verifCouleur(y1,x1): 
+                 print("Le roi ne peut se déplacer, car la reine restraint ses déplacements.")
+                 return 0
+             if verifPiece(y1-i,x1) =="t" and verifCouleur(y1+i,x1) != verifCouleur(y1,x1):
+                print("Le roi ne peut se déplacer, car la tour restraint ses déplacements.")
+                return 0
+        for i in range ((7-y1)+1): #vérification en diagonale droit
+            if verifPiece(y1+i,x1+i) =='q' and verifCouleur(y1+i,x1+i) != verifCouleur(y1,x1) :
+                print("Le roi ne peut se déplacer en diagonale, car il y'a un fou un une reine qui lui barre le chemin.")
+                return 0
+        
+            
+            
+                
+    
 def cavalier():
     return "slt c le cavalier"
 
@@ -222,8 +248,8 @@ def executerFonctionPiece(y,x,y1,x1):
 #Permet de faire bouger les pièces.
 def executionDeLaPartie(coordY,coordX):
     if int(coordY) == (-1) and int(coordX) ==(-1):
-        print ("fin de partie")
-        return 1
+        print("fin de partie, merci d'avoir joué.")
+        return 2
     print("Saissisez les coordonnées d'arrivées (ou saissisez les coordonnées -1 -1 pour vous arrêter) :")
     coordY1=int(input('Coordonnée x: '))
     coordX1=int(input('Coordonnée y: '))
@@ -252,25 +278,30 @@ def partie():
         coordY=int(input('Coordonnée x: '))
         coordX=int(input('Coordonnée y: '))
         if coordX >=0 and coordX <8 and coordY >=0 and coordY <8 or coordX==-1 and coordY ==-1 :
+            verification = executionDeLaPartie(int(coordY),int(coordX))
             if verifCouleur(int(coordY),int(coordX)) == 'Blanc' and tour =='Blanc':
-                if executionDeLaPartie(int(coordY),int(coordX)) !=0:
+                if verification ==1:
                     print('------------------------------------------------------')
                     print ("c\'est au tour des noirs.")
                     tour ='Noir'
-                else:
+                elif  verification ==0:
                     print('------------------------------------------------------')
                     print ("le déplacement n\'est pas valide, il va falloir recommencer.")
+                else:
+                    break
             elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Blanc' :
                 print('------------------------------------------------------')
                 print ("C\'est impossible, les blancs doivent jouer se tour.")
             elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Noir':
-                if executionDeLaPartie(int(coordY),int(coordX)) !=0:
+                if verification ==1:
                     print('------------------------------------------------------')
                     print ("c\'est au tour des Blancs.")
                     tour = 'Blanc'
-                else:
+                elif verification ==0:
                     print('------------------------------------------------------')
                     print ("le déplacement n\'est pas valide, il va falloir recommencer.")
+                else :
+                    break
             elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Blanc':
                 print('------------------------------------------------------')
                 print ("C\'est impossible, les noirs doivent jouer se tour.")
