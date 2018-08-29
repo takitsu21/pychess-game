@@ -218,7 +218,6 @@ def executionDeLaPartie(coordY,coordX):
         print("Saissisez les coordonnées d'arrivées (ou saissisez les coordonnées -1 -1 pour vous arrêter) :")
         coordY1=int(input('Coordonnée x: '))
         coordX1=int(input('Coordonnée y: '))
-        return 0
     if int(coordY) == (-1) and int(coordX) ==(-1):
         print ("fin de partie")
         return 1
@@ -238,7 +237,7 @@ def partie():
         print ('Saissisez les coordonnées de départ (ou saissisez les coordonnées -1 -1 pour vous arrêter)')
         coordY=int(input('Coordonnée x: '))
         coordX=int(input('Coordonnée y: '))
-        if coordX >=0 and coordX <8 and coordY >=0 and coordY <8 :
+        if coordX >=0 and coordX <8 and coordY >=0 and coordY <8 or coordX==-1 and coordY ==-1 :
             if verifCouleur(int(coordY),int(coordX)) == 'Blanc' and tour =='Blanc':
                 if executionDeLaPartie(int(coordY),int(coordX)) !=1:
                     print('------------------------------------------------------')
