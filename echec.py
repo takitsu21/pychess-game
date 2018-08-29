@@ -186,7 +186,7 @@ def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
             print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
             return 0
         
-    for i in range ((7-y1)+1): #vérification en diagonale droit
+    for i in range ((7-y1)+1): #vérification en diagonale droit vers le haut
         if verifCouleur(y1+i,x1+i) == couleurDuRoi and y1+i !=y1 and x1+i!=x1: #Une pièce protège le roi
             break
         if verifPiece(y1+i,x1+i) =="q" and verifCouleur(y1+i,x1+i) != couleurDuRoi : 
@@ -196,7 +196,7 @@ def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
             print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
             return 0
         
-    for i in range(y1+1): #vérification en diagonale gauche
+    for i in range(y1+1): #vérification en diagonale gauche vers le bas
         if verifCouleur(y1-i,x1-i) == couleurDuRoi and y1-i != y1 and x1-i !=x1: #Une pièce protège le roi
             break
         if verifPiece(y1-i,x1-i) =="q" and verifCouleur(y1-i,x1-i) != couleurDuRoi : 
@@ -205,7 +205,27 @@ def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
         if verifPiece(y1-i,x1-i) =="t" and verifCouleur(y1-i,x1-i) != couleurDuRoi:
             print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
             return 0
-        
+    
+    for i in range (y1+1): #Vérification en diagonale gauche vers le haut
+        if verifCouleur(y1-i,x1+i) == couleurDuRoi and y1-i != y1 and x1+i !=x1: #Une pièce protège le roi
+            break
+        if verifPiece(y1-i,x1+i) =="q" and verifCouleur(y1-i,x1+i) != couleurDuRoi : 
+            print("Le roi ne peut pas se déplacer, car la reine restraint ses déplacements.")
+            return 0
+        if verifPiece(y1-i,x1+i) =="t" and verifCouleur(y1-i,x1+i) != couleurDuRoi:
+            print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
+            return 0
+    
+    for i in range((7-y1)+1): #Vérification en diagonale droit  vers le bas
+        if verifCouleur(y1+i,x1-i) == couleurDuRoi and y1+i != y1 and x1-i !=x1: #Une pièce protège le roi
+            break
+        if verifPiece(y1+i,x1-i) =="q" and verifCouleur(y1+i,x1-i) != couleurDuRoi : 
+            print("Le roi ne peut pas se déplacer, car la reine restraint ses déplacements.")
+            return 0
+        if verifPiece(y1+i,x1-i) =="t" and verifCouleur(y1+i,x1-i) != couleurDuRoi:
+            print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
+            return 0
+    
     for i in range (y1 +1) : #Vérification haut du roi
         if verifCouleur(y1-i,x1) == couleurDuRoi and y1-i !=y1: #Une pièce protège le roi
             break
@@ -353,7 +373,7 @@ def executionDeLaPartie(coordY,coordX):
 def partie():
     tour = 'Blanc'
     continuerPartie= 'Oui'
-    print ("Bienvenue dans ce petit jeu d\'échec") 
+    print ("Bienvenue dans ce petit jeu d'échec :)") 
     print ("Les blancs commencent.")
     affichePlateau()
     while continuerPartie == 'Oui':
