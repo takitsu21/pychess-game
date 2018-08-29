@@ -32,25 +32,14 @@ def affichePlateau():
         if acc > 0:
             acc+=1
     print()
-    print('  ',0,1,2,3,4,5,6,7)
+    print('    ',0,1,2,3,4,5,6,7)
     print('   --------------->',' y')
 
 
 #Permet de vérifier si les coordonnées sont bien dans l'échiquier. Demande aussi à l'utilisateur de les saisir.
 def verifCoord(coordX,coordY):
-    erreur=0
-    while erreur == 0:
-        print('les types des coordonnées valent :',type(coordX),' et ',type(coordY))
-        if type(coordX) != int or type(coordY) != int:
-            print(' Les coordonées ne sont pas des entiers, saissisez des nombres entre 0 et 7:')
-            coordY=int(input('Coordonnée x: '))
-            coordX=int(input('Coordonnée y: '))
-        elif int(coordY) < 0 or int(coordY) >= 8 or int(coordX) < 0 or int(coordX) >= 8:
-            print('Coordonées incorrecte, ressaisissez les coordonnées:')
-            coordY=int(input('Coordonnée x: '))
-            coordX=int(input('Coordonnée y: '))
-        else:
-            erreur=1
+    if coordX <0 or coordX >8 or  coordY <0 or coordY >8:
+        return False
     return True
 #Determine la couleur de la pièce dans des coordonnées précis. Renvoie la couleur 'vide' quand il n'y a pas de pièce.
 def verifCouleur(y,x):
@@ -214,16 +203,18 @@ def executionDeLaPartie(coordY,coordX):
     if int(coordY) == (-1) and int(coordX) ==(-1):
         print ("fin de partie")
         return 1
-    if verifCoord(int(coordY),int(coordX)) == True:
-        print("Saissisez les coordonnées d'arrivées (ou saissisez les coordonnées -1 -1 pour vous arrêter) :")
+    print("Saissisez les coordonnées d'arrivées (ou saissisez les coordonnées -1 -1 pour vous arrêter) :")
+    coordY1=int(input('Coordonnée x: '))
+    coordX1=int(input('Coordonnée y: '))
+    while verifCoord(int(coordY1),int(coordX1)) == False:
+        print("les coordonnées saisi sont incorrectes, veuillez recommencer...")
         coordY1=int(input('Coordonnée x: '))
         coordX1=int(input('Coordonnée y: '))
-    if int(coordY) == (-1) and int(coordX) ==(-1):
+    if int(coordY1) == (-1) and int(coordX1) ==(-1):
         print ("fin de partie")
         return 1
-    if verifCoord(int(coordY1),int(coordX1)) == True:
-        executerFonctionPiece(int(coordY),int(coordX),int(coordY1),int(coordX1))
-        return 0
+    executerFonctionPiece(int(coordY),int(coordX),int(coordY1),int(coordX1))
+    return 0
     
 
 #La fonction principale : elle gère la partie.
