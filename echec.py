@@ -67,26 +67,24 @@ def verifPiece(y,x):
 
 #Permet de faire bouger le pion. N'exécute pas pour le moment la prise en passant.
 def pion(y1,x1,y2,x2):
-    if y1<0 or x1<0 or y2<0 or x2<0:
-        return 'Impossible'
-    if y1==6 and y1==y2+2 and verifPiece(y2,x2)==0:#Avancer de 2 noir
-        tmp=plateau[y1][x1]
-        plateau[y1][x1]='.'
-        plateau[y2][x2]=tmp
-    elif y1==1 and y1==y2-2 and verifPiece(y2,x2)==0:#Avancer de 2 blanc
-        tmp=plateau[y1][x1]
-        plateau[y1][x1]='.'
-        plateau[y2][x2]=tmp
-    elif x1 == x2-1 and y2 == y1 and verifPiece(y2,x2) == 0:#Avancer de 1
-        tmp=plateau[y1][x1]
-        plateau[y1][x1]='.'
-        plateau[y2][x2]=tmp
-    elif verifPiece(y2,x2)!= 0 and x1+1==x2 and y2==y1+1 or y2==y1-1 and y1-1>=0 and y1+1<8 and x1+1<8:#Manger piece
-        tmp=plateau[y1][x1]
-        plateau[y1][x1]='.'
-        plateau[y2][x2]=tmp
-    else :
-        return 'Impossible'
+    if verifCoord(y2,x2):
+        if x2==x1:#Avancer tout droit
+            if y1==6 and y2+2==y1 or y1==1 and y2-2==y1:#Avance de 2
+                tmp=plateau[y1][x1]
+                plateau[y1][x1]='.'
+                plateau[y2][x2]=tmp
+                return 1
+            elif y2+1==y1 or y2-1==y1 :#Avance de 1
+                tmp=plateau[y1][x1]
+                plateau[y1][x1]='.'
+                plateau[y2][x2]=tmp
+                return 1
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1 or y2==y1+1 and x2==x1+1 or x2==x1-1:#Manger piece
+            tmp=plateau[y1][x1]
+            plateau[y1][x1]='.'
+            plateau[y2][x2]=tmp
+            return 1
+    return 0
           
 #Permet d'utiliser le fou.
 def fou(x1,y1,x2,y2):
@@ -286,5 +284,6 @@ def partie():
 
             
         
-partie()         
+if __name__ =='__main__':
+    partie()      
         
