@@ -138,65 +138,88 @@ def tour(y1,x1,y2,x2):
     if y1==y2 or x1==x2: #On regarde d'abord si le déplacement correspond à celle d'une tour   
         if verifCouleur(y1,x1) ==verifCouleur(y2,x2)  :#On regarde ensuite si la pièce dans les coord d'arrivées est une alliée
             print ("Vous tentez de capturer une pièce alliée, ce qui est impossible évidemment.")
-            return
+            return 0
         if y1 == y2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and x2>x1:#Déplacement de gauche à droite avec prise de pièce enemie
-           for i in range(x2-x1):
-               if verifCoord((y1+i),(x1+i)) !=0 and y1+i != y1 and x1+i !=x1:
+           for i in range((x2-x1)+1):
+               if verifCouleur((y1),(x1+i)) !='Vide' and x1+i !=x1:
                    print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
-                   return 
+                   return 0
                tmp=plateau[y1][x1]
                plateau[y1][x1]='.'
                plateau[y2][x2]=tmp
+               return 1
         if y1==y2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and x2 <x1:#Déplacement de droite à gauche avec prise de pièce enemie
-            for i in range (x1-x2):
-                if verifCoord((y1+i),(x1+i)) !=0 and y1+i != y1 and x1+i !=x1:
+            for i in range ((x1-x2)+1):
+                if verifCouleur((y1),(x1-i)) !='Vide' and x1-i !=x1:
                     print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
-                    return 
+                    return 0
             tmp=plateau[y1][x1]
             plateau[y1][x1]='.'
             plateau[y2][x2]=tmp
+            return 1
         if x1==x2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and y2>y1:#Déplacement du haut vers le bas avec prise de pièce enemie
-            for i in range (y2-y1):
-                if verifCoord((y1+i),(x1+i)) !=0 and y1+i != y1 and x1+i !=x1:
+            for i in range ((y2-y1)+1):
+                if verifCouleur(y1+i,x1)!='Vide' and y1+i !=y1:
                     print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
-                    return 
+                    return 0
             tmp=plateau[y1][x1]
             plateau[y1][x1]='.'
             plateau[y2][x2]=tmp
+            return 1
         if x1==x2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and y1>y2:#Déplacement du bas vers le haut avec prise de pièce enemie
-            for i in range (y1-y2):
-                if verifCoord((y1+i),(x1+i)) !=0 and y1+i != y1 and x1+i !=x1:
+            for (i) in range ((y1-y2)+1):
+                if verifCouleur(y1-i,x1)!='Vide' and y1-i !=y1:
                     print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
-                    return 
+                    return 0
             tmp=plateau[y1][x1]
             plateau[y1][x1]='.'
             plateau[y2][x2]=tmp
+            return 1
     else:
         print("Le coordonées données ne respectent pas les caractéristiques de la tour : la tour se déplace soit horizontalement ou verticalement.")
-        return
+        return 0
 
 #Permet de faire appel aux bonnes fonctions quand le joueur souhaite bouger une pièce.
 def executerFonctionPiece(y,x,y1,x1):
     if verifPiece(y,x) == 1:
         print ("le Pion a été selectionné.")
-        pion(y,x,y1,x1)
+        if pion(y,x,y1,x1) == 0:
+            return 0
+        else :
+            return 1
     elif verifPiece(y,x) == 2:
         print ("le Fou a été selectionné.")
-        fou(y,x,y1,x1)
+        if fou(y,x,y1,x1) == 0:
+            return 0
+        else :
+            return 1
     elif verifPiece(y,x) == 3:
         print ("la Reine a été selectionnée.")
-        reine(y,x,y1,x1)
+        if reine(y,x,y1,x1) == 0:
+            return 0
+        else :
+            return 1
     elif verifPiece(y,x) == 4:
         print ("le Roi a été selectionné.")
-        roi(y,x,y1,x1)
+        if roi(y,x,y1,x1) == 0:
+            return 0
+        else :
+            return 1
     elif verifPiece(y,x) == 5:
         print ("le Cavalier a été selectionné.")
-        cavalier(y,x,y1,x1)
+        if cavalier(y,x,y1,x1) == 0:
+            return 0
+        else :
+            return 1
     elif verifPiece(y,x) == 6:
         print ("la Tour a été selectionnée.")
-        tour(y,x,y1,x1)
+        if tour(y,x,y1,x1) == 0:
+            return 0
+        else :
+            return 1
     else:
         print("Il n'y a pas de pièce à cet emplacement")
+        return 0
 
 #Permet de faire bouger les pièces.
 def executionDeLaPartie(coordY,coordX):
@@ -213,8 +236,10 @@ def executionDeLaPartie(coordY,coordX):
     if int(coordY1) == (-1) and int(coordX1) ==(-1):
         print ("fin de partie")
         return 1
-    executerFonctionPiece(int(coordY),int(coordX),int(coordY1),int(coordX1))
-    return 0
+    if executerFonctionPiece(int(coordY),int(coordX),int(coordY1),int(coordX1)) == 0:
+        return 0
+    else:
+        return 1
     
 
 #La fonction principale : elle gère la partie.
@@ -230,22 +255,24 @@ def partie():
         coordX=int(input('Coordonnée y: '))
         if coordX >=0 and coordX <8 and coordY >=0 and coordY <8 or coordX==-1 and coordY ==-1 :
             if verifCouleur(int(coordY),int(coordX)) == 'Blanc' and tour =='Blanc':
-                if executionDeLaPartie(int(coordY),int(coordX)) !=1:
+                if executionDeLaPartie(int(coordY),int(coordX)) !=0:
                     print('------------------------------------------------------')
                     print ("c\'est au tour des noirs.")
                     tour ='Noir'
                 else:
-                    return
+                    print('------------------------------------------------------')
+                    print ("le déplacement n\'est pas valide, il va falloir recommencer.")
             elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Blanc' :
                 print('------------------------------------------------------')
                 print ("C\'est impossible, les blancs doivent jouer se tour.")
             elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Noir':
-                if executionDeLaPartie(int(coordY),int(coordX)) !=1:
+                if executionDeLaPartie(int(coordY),int(coordX)) !=0:
                     print('------------------------------------------------------')
                     print ("c\'est au tour des Blancs.")
                     tour = 'Blanc'
                 else:
-                    return
+                    print('------------------------------------------------------')
+                    print ("le déplacement n\'est pas valide, il va falloir recommencer.")
             elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Blanc':
                 print('------------------------------------------------------')
                 print ("C\'est impossible, les noirs doivent jouer se tour.")
