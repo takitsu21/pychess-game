@@ -236,31 +236,35 @@ def partie():
     affichePlateau()
     while continuerPartie == 'Oui':
         print ('Saissisez les coordonnées de départ (ou saissisez les coordonnées -1 -1 pour vous arrêter)')
-        coordY=input('Coordonnée x: ')
-        coordX=input('Coordonnée y: ')
-        if verifCouleur(int(coordY),int(coordX)) == 'Blanc' and tour =='Blanc':
-            if executionDeLaPartie(int(coordY),int(coordX)) !=1:
+        coordY=int(input('Coordonnée x: '))
+        coordX=int(input('Coordonnée y: '))
+        if coordX >=0 and coordX <8 and coordY >=0 and coordY <8 :
+            if verifCouleur(int(coordY),int(coordX)) == 'Blanc' and tour =='Blanc':
+                if executionDeLaPartie(int(coordY),int(coordX)) !=1:
+                    print('------------------------------------------------------')
+                    print ("c\'est au tour des noirs.")
+                    tour ='Noir'
+                else:
+                    return
+            elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Blanc' :
                 print('------------------------------------------------------')
-                print ("c\'est au tour des noirs.")
-                tour ='Noir'
-            else:
-                return
-        elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Blanc' :
-            print('------------------------------------------------------')
-            print ("C\'est impossible, les blancs doivent jouer se tour.")
-        elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Noir':
-            if executionDeLaPartie(int(coordY),int(coordX)) !=1:
+                print ("C\'est impossible, les blancs doivent jouer se tour.")
+            elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Noir':
+                if executionDeLaPartie(int(coordY),int(coordX)) !=1:
+                    print('------------------------------------------------------')
+                    print ("c\'est au tour des Blancs.")
+                    tour = 'Blanc'
+                else:
+                    return
+            elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Blanc':
                 print('------------------------------------------------------')
-                print ("c\'est au tour des Blancs.")
-                tour = 'Blanc'
-            else:
-                return
-        elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Blanc':
+                print ("C\'est impossible, les noirs doivent jouer se tour.")
+            elif verifCouleur(int(coordY),int(coordX)) == 'Vide':
+                print('------------------------------------------------------')
+                print ("La case est vide, choissisez une pièce.")
+        else:
             print('------------------------------------------------------')
-            print ("C\'est impossible, les noirs doivent jouer se tour.")
-        elif verifCouleur(int(coordY),int(coordX)) == 'Vide':
-            print('------------------------------------------------------')
-            print ("La case est vide, choissisez une pièce.")
+            print("Les coordonnées ne sont pas comprises dans l\'échiquier.")
         affichePlateau()
 
             
