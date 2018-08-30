@@ -24,7 +24,7 @@ plateau=[['t', 'c', 'f', 'k', 'q', 'f', 'c', 't'],
 def affichePlateau():
     print()
     acc=1
-    print("x")
+    print("y")
     print('^',0,end='  ')
     for i in range(8):
         for j in range(8):
@@ -36,7 +36,7 @@ def affichePlateau():
             acc+=1
     print()
     print('    ',0,1,2,3,4,5,6,7)
-    print('     --------------->',' y')
+    print('     --------------->',' x')
 
 
 #Permet de vérifier si les coordonnées sont bien dans l'échiquier. Demande aussi à l'utilisateur de les saisir.
@@ -90,107 +90,157 @@ def pion(y1,x1,y2,x2):
     return 0
           
 #Permet d'utiliser le fou.
-def fou(y1,x1,y2,x2):
-    verifX=y1
-    verifY=x1
-    if verifCoord(y2,x2):
-        if verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2):#Manger
-            if y1>y2:
-                while True:
-                    if x1>x2 and verifPiece(verifX-1,verifY-1)==0:#monter gauche
-                        verifX-=1
-                        verifY-=1
-                        if verifPiece(verifX-1,verifY-1)==0 :
-                            if verifPiece(verifX-2,verifY-2)!=0:
-                                mouvementPiece(y1,x1,y2,x2)
-                                return 1
-                            mouvementPiece(y1,x1,y2,x2)
-                            return 1   
-                    elif x1<x2 and verifPiece(verifX-1,verifY+1)==0 :#monter droite
-                        verifX-=1
-                        verifY+=1
-                        if verifPiece(verifX-1,verifY+1)==0:
-                            if verifPiece(verifX-2,verifY+2)!=0:
-                                mouvementPiece(y1,x1,y2,x2)
-                                return 1
-                            mouvementPiece(y1,x1,y2,x2)
-                            return 1                      
-            if y1<y2:#Descendre
-                while True:
-                    if y2>y1 and verifPiece(verifX+1,verifY+1)==0:#descendre droite
-                        verifX+=1
-                        verifY+=1
-                        if verifPiece(verifX+1,verifY+1)==0:
-                            if verifPiece(verifX+2,verifY+2)!=0:
-                                mouvementPiece(y1,x1,y2,x2)
-                                return 1
-                            mouvementPiece(y1,x1,y2,x2)
-                            return 1                       
-                    elif y2<y1 and verifPiece(verifX-1,verifY+1)==0:#descendre gauche
-                        verifX-=1
-                        verifY+=1
-                        if verifPiece(verifX-1,verifY+1)==0:
-                            if verifPiece(verifX-2,verifY+2)!=0:
-                                mouvementPiece(y1,x1,y2,x2)
-                                return 1
-                            mouvementPiece(y1,x1,y2,x2)
-                            return 1                    
-        else:
-            if y1>y2 and verifPiece(verifX-1,verifY-1)==0 or verifPiece(verifX+1,verifY-1)==0:#Monter
-                while verifX != y2 and verifY != x2:
-                    if x1>x2 and verifPiece(verifX-1,verifY-1)==0:#monter gauche
-                        verifX-=1
-                        verifY-=1
-                    elif x1<x2 and verifPiece(verifX-1,verifY+1)==0 :#monter droite
-                        verifX-=1
-                        verifY+=1
-                    elif verifPiece(verifX,verifY)!=0 :
-                        return 0
-                mouvementPiece(y1,x1,y2,x2)
-                return 1
-            if y1<y2:#Descendre
-                while verifX != y2 and verifY != x2:
-                    if y2>y1 and verifPiece(verifX+1,verifY+1)==0:#descendre droite
-                        verifX+=1
-                        verifY+=1
-                    elif y2<y1 and verifPiece(verifX-1,verifY+1)==0:#descendre gauche
-                        verifX-=1
-                        verifY+=1
-                    elif verifPiece(verifX,verifY)!=0:          
-                        return 0
-                mouvementPiece(y1,x1,y2,x2)
-                return 1
+#def fou(y1,x1,y2,x2):
+#    verifX=y1
+#    verifY=x1
+#    if verifCoord(y2,x2):
+#        if verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2):#Manger
+#            if y1>y2:
+#                while True:
+#                    if x1>x2 and verifPiece(verifX-1,verifY-1)==0:#monter gauche
+#                        verifX-=1
+#                        verifY-=1
+#                        if verifPiece(verifX-1,verifY-1)==0 :
+#                            if verifPiece(verifX-2,verifY-2)!=0:
+#                                mouvementPiece(y1,x1,y2,x2)
+#                                return 1
+#                            mouvementPiece(y1,x1,y2,x2)
+#                            return 1   
+#                    elif x1<x2 and verifPiece(verifX-1,verifY+1)==0 :#monter droite
+#                        verifX-=1
+#                        verifY+=1
+#                        if verifPiece(verifX-1,verifY+1)==0:
+#                            if verifPiece(verifX-2,verifY+2)!=0:
+#                                mouvementPiece(y1,x1,y2,x2)
+#                                return 1
+#                            mouvementPiece(y1,x1,y2,x2)
+#                            return 1                      
+#            if y1<y2:#Descendre
+#                while True:
+#                    if y2>y1 and verifPiece(verifX+1,verifY+1)==0:#descendre droite
+#                        verifX+=1
+#                        verifY+=1
+#                        if verifPiece(verifX+1,verifY+1)==0:
+#                            if verifPiece(verifX+2,verifY+2)!=0:
+#                                mouvementPiece(y1,x1,y2,x2)
+#                                return 1
+#                            mouvementPiece(y1,x1,y2,x2)
+#                            return 1                       
+#                    elif y2<y1 and verifPiece(verifX-1,verifY+1)==0:#descendre gauche
+#                        verifX-=1
+#                        verifY+=1
+#                        if verifPiece(verifX-1,verifY+1)==0:
+#                            if verifPiece(verifX-2,verifY+2)!=0:
+#                                mouvementPiece(y1,x1,y2,x2)
+#                                return 1
+#                            mouvementPiece(y1,x1,y2,x2)
+#                            return 1                    
+#        else:
+#            if y1>y2 and verifPiece(verifX-1,verifY-1)==0 or verifPiece(verifX+1,verifY-1)==0:#Monter
+#                while verifX != y2 and verifY != x2:
+#                    if x1>x2 and verifPiece(verifX-1,verifY-1)==0:#monter gauche
+#                        verifX-=1
+#                        verifY-=1
+#                    elif x1<x2 and verifPiece(verifX-1,verifY+1)==0 :#monter droite
+#                        verifX-=1
+#                        verifY+=1
+#                    elif verifPiece(verifX,verifY)!=0 :
+#                        return 0
+#                mouvementPiece(y1,x1,y2,x2)
+#                return 1
+#            if y1<y2:#Descendre
+#                while verifX != y2 and verifY != x2:
+#                    if y2>y1 and verifPiece(verifX+1,verifY+1)==0:#descendre droite
+#                        verifX+=1
+#                        verifY+=1
+#                    elif y2<y1 and verifPiece(verifX-1,verifY+1)==0:#descendre gauche
+#                        verifX-=1
+#                        verifY+=1
+#                    elif verifPiece(verifX,verifY)!=0:          
+#                        return 0
+#                mouvementPiece(y1,x1,y2,x2)
+#                return 1
+#    return 0
+    
+def estDiagonale(y1,x1,y2,x2,coteAVerifier):
+    Y2=y2
+    X2=x2
+    if coteAVerifier==0:#haut droite
+        for i in range(y1-y2):
+            X2-=1
+            Y2+=1
+        if X2==x1 and Y2==y1:
+            return 1
+    if coteAVerifier==1:#bas gauche
+        for i in range(y2-y1):
+            X2+=1
+            Y2-=1
+        if X2==x1 and Y2==y1:
+            return 1
+    if coteAVerifier==2:#bas droite
+        for i in range(y2-y1):
+            X2-=1
+            Y2-=1
+        if X2==x1 and Y2==y1:
+            return 1
+    if coteAVerifier==3:#haut gauche
+        for i in range(y1-y2):
+            X2+=1
+            Y2+=1
+        if X2==x1 and Y2==y1:
+            return 1
     return 0
 
+def fou(y1,x1,y2,x2):
+    coteAVerifier=-1
+    if y2<y1 and x2<x1:
+        coteAVerifier=3
+    if y2<y1 and x2>x1:
+        coteAVerifier=0
+    if y2>y1 and x2<x1:
+        coteAVerifier=1
+    if y2>y1 and x2>x1:
+        coteAVerifier=2
+    if verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier)==1:
+        mouvementPiece(y1,x1,y2,x2)
+        return 1
+    return 0
 
 def reine():
     return "slt g des boobs"
 
 #Permet de voir si un déplacement est valide sur les diagonales
-def verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier):
+def verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier):#0 haut droit 1 bas gauche 2 bas droit 3 haut gauche
     if coteAVerifier == 0:  
-        for i in range ((y2-y1)+1): #vérification en diagonale droit vers le haut
-            if verifCouleur(y1+i,x1+i) !='Vide' and y1+i !=y1 and x1+i!=x1:
+        print("0")
+        for i in range (1,y1-y2): #vérification en diagonale droit vers le haut
+            print("jellad est pd",i,y1-y2,y1+i,x1+i)
+            if verifCouleur(y1-i,x1+i) !='Vide' and y1-i !=y1 and x1+i!=x1:
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
         return 1
     if coteAVerifier == 1:
-        for i in range((y1-y2)+1): #vérification en diagonale gauche vers le bas
+        print("1")
+        for i in range(y2-y1+1): #vérification en diagonale gauche vers le bas
             if verifCouleur(y1-i,x1-i) != 'Vide' and y1-i != y1 and x1-i !=x1: 
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
         return 1
     if coteAVerifier == 2:
-        for i in range((y2-y1)+1): #Vérification en diagonale droit  vers le bas
+        print("2")
+        for i in range(y2-y1+1): #Vérification en diagonale droit  vers le bas
             if verifCouleur(y1+i,x1-i) != 'Vide' and y1+i != y1 and x1-i !=x1: 
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
         return 1
     if coteAVerifier == 3:
-        for i in range ((y1-y2)+1): #Vérification en diagonale gauche vers le haut
-            if verifCouleur(y1-i,x1+i)!= 'Vide' and y1-i != y1 and x1+i !=x1: 
-                print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
+        print("3")
+        for i in range (y1-y2+1): #Vérification en diagonale gauche vers le haut
+            print("test",i,y1-y2)
+            if verifCouleur(y1-i,x1-i)!= 'Vide' and y1-i != y1 and x1-i !=x1: 
+                print("Une pièce est sur le chemin, le déplacement ne peut se faire.",i)
                 return 0
+        
         return 1
     
 #Permet de voir si un déplacement est valide sur les côtés
@@ -433,12 +483,12 @@ def executionDeLaPartie(coordY,coordX):
         print("fin de partie, merci d'avoir joué.")
         return 2
     print("Saissisez les coordonnées d'arrivées (ou saissisez les coordonnées -1 -1 pour vous arrêter) :")
-    coordY1=int(input('Coordonnée x: '))
-    coordX1=int(input('Coordonnée y: '))
+    coordY1=int(input('Coordonnée y: '))
+    coordX1=int(input('Coordonnée x: '))
     while verifCoord(int(coordY1),int(coordX1)) == False:
         print("les coordonnées saisi sont incorrectes, veuillez recommencer...")
-        coordY1=int(input('Coordonnée x: '))
-        coordX1=int(input('Coordonnée y: '))
+        coordY1=int(input('Coordonnée y: '))
+        coordX1=int(input('Coordonnée x: '))
     if int(coordY1) == (-1) and int(coordX1) ==(-1):
         print ("fin de partie")
         return 1
@@ -457,16 +507,15 @@ def partie():
     affichePlateau()
     while continuerPartie == 'Oui':
         print ('Saissisez les coordonnées de départ (ou saissisez les coordonnées -1 -1 pour vous arrêter)')
-        coordY=int(input('Coordonnée x: '))
-        coordX=int(input('Coordonnée y: '))
+        coordY=int(input('Coordonnée y: '))
+        coordX=int(input('Coordonnée x: '))
         if coordX >=0 and coordX <8 and coordY >=0 and coordY <8 or coordX==-1 and coordY ==-1 :
-            verification = executionDeLaPartie(int(coordY),int(coordX))
             if verifCouleur(int(coordY),int(coordX)) == 'Blanc' and tour =='Blanc':
-                if verification ==1:
+                if executionDeLaPartie(int(coordY),int(coordX)) ==1:
                     print('------------------------------------------------------')
                     print ("c\'est au tour des noirs.")
                     tour ='Noir'
-                elif  verification ==0:
+                elif  executionDeLaPartie(int(coordY),int(coordX)) ==0:
                     print('------------------------------------------------------')
                     print ("le déplacement n\'est pas valide, il va falloir recommencer.")
                 else:
@@ -475,11 +524,11 @@ def partie():
                 print('------------------------------------------------------')
                 print ("C\'est impossible, les blancs doivent jouer se tour.")
             elif verifCouleur(int(coordY),int(coordX)) == 'Noir' and tour =='Noir':
-                if verification ==1:
+                if executionDeLaPartie(int(coordY),int(coordX)) ==1:
                     print('------------------------------------------------------')
                     print ("c\'est au tour des Blancs.")
                     tour = 'Blanc'
-                elif verification ==0:
+                elif executionDeLaPartie(int(coordY),int(coordX)) ==0:
                     print('------------------------------------------------------')
                     print ("le déplacement n\'est pas valide, il va falloir recommencer.")
                 else :
