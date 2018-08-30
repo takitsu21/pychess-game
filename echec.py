@@ -265,37 +265,58 @@ def roi(y1,x1,y2,x2):
         else:
             return 0 
 
-def cavalier():
-    return "slt c le cavalier"
+#Permet de faire bouger le cavalier. Vérifie si le déplacement est valide.
+def cavalier(y1,x1,y2,x2):
+    if verifCouleur(y1,x1) == verifCouleur(y2,x2):
+        print ("Vous tentez de capturer une pièce qui est dans votre camp, ce qui est impossible.")
+        return 0
+    if y1 >y2 and x1== x2 +1 or x1==x2-1 and y1 ==y2-3: #déplacement honrizontal sur la gauche
+        mouvementPiece(y1,x1,y2,x2)
+        return 1
+    if y2>y1 and x1==x2+1 or x1==x2-1 and y2 == y1-3: #déplacement honrizontal sur la droite
+        mouvementPiece(y1,x1,y2,x2)
+        return 1
+    if x1>x2 and x2+3==x1 and y1==y2+1 or y1==y2-1: #Déplacement vertical vers le bas
+        mouvementPiece(y1,x1,y2,x2)
+        return 1
+    if x2>x1 and x1+3==x2 and y1==y2+1 or y1==y2-1: #Déplacement vertical vers le haut
+         mouvementPiece(y1,x1,y2,x2)
+         return 1
+    else:
+         print("Le déplacement n'est pas valide, le cavalier se déplace en L : deux cases devant lui et un case sur la gauche ou la droite.")
+         return 0
+        
 
 #Permet de faire bouger la tour en respectant les contraintes. Ne fait pas le roc.
 def tour(y1,x1,y2,x2):    
-    if y1==y2 or x1==x2: #On regarde d'abord si le déplacement correspond à celle d'une tour   
-        if verifCouleur(y1,x1) ==verifCouleur(y2,x2)  :#On regarde ensuite si la pièce dans les coord d'arrivées est une alliée
+    if y1==y2 or x1==x2: #On regarde d'abord si le déplacement correspond à celle d'une tour 
+        couleurDeLaTour =verifCouleur(y1,x1)
+        couleurDeLaPiece =verifCouleur(y2,x2) 
+        if couleurDeLaTour ==couleurDeLaPiece  :#On regarde ensuite si la pièce dans les coord d'arrivées est une alliée
             print ("Vous tentez de capturer une pièce alliée, ce qui est impossible évidemment.")
             return 0
-        if y1 == y2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and x2>x1:#Déplacement de gauche à droite avec prise de pièce enemie
+        if y1 == y2 and couleurDeLaTour !=couleurDeLaPiece and x2>x1:#Déplacement de gauche à droite avec prise de pièce enemie
            for i in range((x2-x1)+1):
                if verifCouleur((y1),(x1+i)) !='Vide' and x1+i !=x1:
                    print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
                    return 0
                mouvementPiece(y1,x1,y2,x2)
                return 1
-        if y1==y2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and x2 <x1:#Déplacement de droite à gauche avec prise de pièce enemie
+        if y1==y2 and couleurDeLaTour !=couleurDeLaPiece and x2 <x1:#Déplacement de droite à gauche avec prise de pièce enemie
             for i in range ((x1-x2)+1):
                 if verifCouleur((y1),(x1-i)) !='Vide' and x1-i !=x1:
                     print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
                     return 0
             mouvementPiece(y1,x1,y2,x2)
             return 1
-        if x1==x2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and y2>y1:#Déplacement du haut vers le bas avec prise de pièce enemie
+        if x1==x2 and couleurDeLaTour !=couleurDeLaPiece and y2>y1:#Déplacement du haut vers le bas avec prise de pièce enemie
             for i in range ((y2-y1)+1):
                 if verifCouleur(y1+i,x1)!='Vide' and y1+i !=y1:
                     print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
                     return 0
             mouvementPiece(y1,x1,y2,x2)
             return 1
-        if x1==x2 and verifCouleur(y1,x1) !=verifCouleur(y2,x2) and y1>y2:#Déplacement du bas vers le haut avec prise de pièce enemie
+        if x1==x2 and couleurDeLaTour !=couleurDeLaPiece and y1>y2:#Déplacement du bas vers le haut avec prise de pièce enemie
             for (i) in range ((y1-y2)+1):
                 if verifCouleur(y1-i,x1)!='Vide' and y1-i !=y1:
                     print ("La tour ne peut pas se déplacer car il y\'a une pièce sur son chemin.")
@@ -345,7 +366,7 @@ def executerFonctionPiece(y,x,y1,x1):
         else :
             return 1
     else:
-        print("Il n'y a pas de pièce à cet emplacement")
+        print("Il n'y a pas de pièce à cet emplacement.")
         return 0
 
 #Permet de faire bouger les pièces.
