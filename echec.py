@@ -17,6 +17,9 @@ plateau=[['t', 'c', 'f', 'k', 'q', 'f', 'c', 't'],
  ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
  ['T', 'C', 'F', 'K', 'Q', 'F', 'C', 'T']]
 
+
+
+
 #Affiche le plateau dans le terminal.
 def affichePlateau():
     print()
@@ -162,6 +165,61 @@ def fou(y1,x1,y2,x2):
 
 def reine():
     return "slt g des boobs"
+
+#Permet de voir si un déplacement est valide sur les diagonales
+def verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier):
+    if coteAVerifier == 0:  
+        for i in range ((y2-y1)+1): #vérification en diagonale droit vers le haut
+            if verifCouleur(y1+i,x1+i) !='Vide' and y1+i !=y1 and x1+i!=x1:
+                print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
+                return 0
+        return 1
+    if coteAVerifier == 1:
+        for i in range((y1-y2)+1): #vérification en diagonale gauche vers le bas
+            if verifCouleur(y1-i,x1-i) != 'Vide' and y1-i != y1 and x1-i !=x1: 
+                print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
+                return 0
+        return 1
+    if coteAVerifier == 2:
+        for i in range((y2-y1)+1): #Vérification en diagonale droit  vers le bas
+            if verifCouleur(y1+i,x1-i) != 'Vide' and y1+i != y1 and x1-i !=x1: 
+                print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
+                return 0
+        return 1
+    if coteAVerifier == 3:
+        for i in range ((y1-y2)+1): #Vérification en diagonale gauche vers le haut
+            if verifCouleur(y1-i,x1+i)!= 'Vide' and y1-i != y1 and x1+i !=x1: 
+                print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
+                return 0
+        return 1
+    
+#Permet de voir si un déplacement est valide sur les côtés
+def verificationDeplacementValideHonrizontal(y1,x1,y2,x2,coteAVerifier):
+    if coteAVerifier == 0:
+     for i in range((y2-y1)+1): #vérification à droite du roi
+        if verifCouleur(y1+i,x1) !='Vide' and y1+i !=y1 and x1+i!=x1:
+                print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
+                return 0
+    else:    
+        for i in range ((y1-y2)+1): #vérification à gauche du roi
+             if verifCouleur(y1-i,x1) !='Vide' and y1+i !=y1 and x1+i!=x1:
+                print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
+                return 0 
+    return 1
+
+#Permet de voir si un déplacement est valide sur les en hat et en bas
+def  verificationDeplacementValideVertical(y1,x1,y2,x2,coteAVerifier):
+    if coteAVerifier == 0:
+        for i in range ((y1-y2) +1) : #Vérification haut du roi
+            if verifCouleur(y1+i,x1) !='Vide' and y1+i !=y1 and x1+i!=x1:
+                print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
+                return 0
+    else :
+        for i in range ((y2-y1) +1): #Vérification bas du roi
+            if verifCouleur(y1+i,x1) !='Vide' and y1+i !=y1 and x1+i!=x1:
+                print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
+                return 0
+    return 1    
 
 #permet de voir si le roi à le champ libre pour se déplacer
 def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
