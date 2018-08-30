@@ -77,16 +77,31 @@ def verifPiece(y,x):
 #Permet de faire bouger le pion. N'exécute pas pour le moment la prise en passant.
 def pion(y1,x1,y2,x2):
     if verifCoord(y2,x2):
-        if x2==x1:#Avancer tout droit
-            if y1==6 and y2+2==y1 or y1==1 and y2-2==y1:#Avance de 2
+        if x2==x1 and verifPiece(y2,x2)==0:#Avancer tout droit blanc
+            if y1==6 and y2+2==y1:#Avance de 2 blanc
                 mouvementPiece(y1,x1,y2,x2)
                 return 1
-            elif y2+1==y1 or y2-1==y1 :#Avance de 1
+            elif y2+1==y1 :#Avance de 1 blanc
                 mouvementPiece(y1,x1,y2,x2)
                 return 1
-        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1 or y2==y1+1 and x2==x1+1 or x2==x1-1:#Manger piece
+        if x2==x1 and verifPiece(y2,x2)==0:#Avancer tout droit noir
+            if y1==1 and y2-2==y1:#Avance de 2 noir
+                mouvementPiece(y1,x1,y2,x2)
+                return 1
+            elif y2-1==y1:#Avance de 1 noir
+                mouvementPiece(y1,x1,y2,x2)
+                return 1
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1  and x2==x1+1 :#Manger piece
             mouvementPiece(y1,x1,y2,x2)
             return 1
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1+1  and x2==x1+1 :#Manger piece
+            mouvementPiece(y1,x1,y2,x2)
+            return 1
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1  and x2==x1-1 :#Manger piece
+            mouvementPiece(y1,x1,y2,x2)
+            return 1
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1+1  and x2==x1-1 :#Manger piece
+            mouvementPiece(y1,x1,y2,x2)
     return 0
           
 #Permet d'utiliser le fou.
@@ -221,21 +236,21 @@ def verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier):#0 haut dr
         return 1
     if coteAVerifier == 1:
         print("1")
-        for i in range(y2-y1+1): #vérification en diagonale gauche vers le bas
+        for i in range(1,y2-y1): #vérification en diagonale gauche vers le bas
             if verifCouleur(y1-i,x1-i) != 'Vide' and y1-i != y1 and x1-i !=x1: 
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
         return 1
     if coteAVerifier == 2:
         print("2")
-        for i in range(y2-y1+1): #Vérification en diagonale droit  vers le bas
+        for i in range(1,y2-y1): #Vérification en diagonale droit  vers le bas
             if verifCouleur(y1+i,x1-i) != 'Vide' and y1+i != y1 and x1-i !=x1: 
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
         return 1
     if coteAVerifier == 3:
         print("3")
-        for i in range (y1-y2+1): #Vérification en diagonale gauche vers le haut
+        for i in range (1,y1-y2): #Vérification en diagonale gauche vers le haut
             print("test",i,y1-y2)
             if verifCouleur(y1-i,x1-i)!= 'Vide' and y1-i != y1 and x1-i !=x1: 
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.",i)
