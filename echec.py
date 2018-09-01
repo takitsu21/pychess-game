@@ -77,106 +77,34 @@ def verifPiece(y,x):
 #Permet de faire bouger le pion. N'exécute pas pour le moment la prise en passant.
 def pion(y1,x1,y2,x2):
     if verifCoord(y2,x2):
-        if x2==x1 and verifPiece(y2,x2)==0:#Avancer tout droit blanc
+        if x2==x1 and verifPiece(y2,x2)==0 and verifCouleur(y1,x1)=='Blanc':#Avancer tout droit blanc
             if y1==6 and y2+2==y1:#Avance de 2 blanc
                 mouvementPiece(y1,x1,y2,x2)
                 return 1
             elif y2+1==y1 :#Avance de 1 blanc
                 mouvementPiece(y1,x1,y2,x2)
                 return 1
-        if x2==x1 and verifPiece(y2,x2)==0:#Avancer tout droit noir
+        elif x2==x1 and verifPiece(y2,x2)==0 and verifCouleur(y1,x1)=='Noir':#Avancer tout droit noir
             if y1==1 and y2-2==y1:#Avance de 2 noir
                 mouvementPiece(y1,x1,y2,x2)
                 return 1
             elif y2-1==y1:#Avance de 1 noir
                 mouvementPiece(y1,x1,y2,x2)
                 return 1
-        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1  and x2==x1+1 :#Manger piece
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1  and x2==x1+1 :#Manger piece noir droite
             mouvementPiece(y1,x1,y2,x2)
             return 1
-        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1+1  and x2==x1+1 :#Manger piece
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1+1  and x2==x1+1 :#Manger piece blanche droite
             mouvementPiece(y1,x1,y2,x2)
             return 1
-        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1  and x2==x1-1 :#Manger piece
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1  and x2==x1-1 :#Manger piece noir gauche
             mouvementPiece(y1,x1,y2,x2)
             return 1
-        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1+1  and x2==x1-1 :#Manger piece
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1+1  and x2==x1-1 :#Manger piece blanche gauche
             mouvementPiece(y1,x1,y2,x2)
     return 0
           
-#Permet d'utiliser le fou.
-#def fou(y1,x1,y2,x2):
-#    verifX=y1
-#    verifY=x1
-#    if verifCoord(y2,x2):
-#        if verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2):#Manger
-#            if y1>y2:
-#                while True:
-#                    if x1>x2 and verifPiece(verifX-1,verifY-1)==0:#monter gauche
-#                        verifX-=1
-#                        verifY-=1
-#                        if verifPiece(verifX-1,verifY-1)==0 :
-#                            if verifPiece(verifX-2,verifY-2)!=0:
-#                                mouvementPiece(y1,x1,y2,x2)
-#                                return 1
-#                            mouvementPiece(y1,x1,y2,x2)
-#                            return 1   
-#                    elif x1<x2 and verifPiece(verifX-1,verifY+1)==0 :#monter droite
-#                        verifX-=1
-#                        verifY+=1
-#                        if verifPiece(verifX-1,verifY+1)==0:
-#                            if verifPiece(verifX-2,verifY+2)!=0:
-#                                mouvementPiece(y1,x1,y2,x2)
-#                                return 1
-#                            mouvementPiece(y1,x1,y2,x2)
-#                            return 1                      
-#            if y1<y2:#Descendre
-#                while True:
-#                    if y2>y1 and verifPiece(verifX+1,verifY+1)==0:#descendre droite
-#                        verifX+=1
-#                        verifY+=1
-#                        if verifPiece(verifX+1,verifY+1)==0:
-#                            if verifPiece(verifX+2,verifY+2)!=0:
-#                                mouvementPiece(y1,x1,y2,x2)
-#                                return 1
-#                            mouvementPiece(y1,x1,y2,x2)
-#                            return 1                       
-#                    elif y2<y1 and verifPiece(verifX-1,verifY+1)==0:#descendre gauche
-#                        verifX-=1
-#                        verifY+=1
-#                        if verifPiece(verifX-1,verifY+1)==0:
-#                            if verifPiece(verifX-2,verifY+2)!=0:
-#                                mouvementPiece(y1,x1,y2,x2)
-#                                return 1
-#                            mouvementPiece(y1,x1,y2,x2)
-#                            return 1                    
-#        else:
-#            if y1>y2 and verifPiece(verifX-1,verifY-1)==0 or verifPiece(verifX+1,verifY-1)==0:#Monter
-#                while verifX != y2 and verifY != x2:
-#                    if x1>x2 and verifPiece(verifX-1,verifY-1)==0:#monter gauche
-#                        verifX-=1
-#                        verifY-=1
-#                    elif x1<x2 and verifPiece(verifX-1,verifY+1)==0 :#monter droite
-#                        verifX-=1
-#                        verifY+=1
-#                    elif verifPiece(verifX,verifY)!=0 :
-#                        return 0
-#                mouvementPiece(y1,x1,y2,x2)
-#                return 1
-#            if y1<y2:#Descendre
-#                while verifX != y2 and verifY != x2:
-#                    if y2>y1 and verifPiece(verifX+1,verifY+1)==0:#descendre droite
-#                        verifX+=1
-#                        verifY+=1
-#                    elif y2<y1 and verifPiece(verifX-1,verifY+1)==0:#descendre gauche
-#                        verifX-=1
-#                        verifY+=1
-#                    elif verifPiece(verifX,verifY)!=0:          
-#                        return 0
-#                mouvementPiece(y1,x1,y2,x2)
-#                return 1
-#    return 0
-    
+#Verifie si la position y2 et x2 sont bien sur la diagonale de la piece selectionner
 def estDiagonale(y1,x1,y2,x2,coteAVerifier):
     Y2=y2
     X2=x2
@@ -185,27 +113,28 @@ def estDiagonale(y1,x1,y2,x2,coteAVerifier):
             X2-=1
             Y2+=1
         if X2==x1 and Y2==y1:
-            return 1
+            return True
     if coteAVerifier==1:#bas gauche
         for i in range(y2-y1):
             X2+=1
             Y2-=1
         if X2==x1 and Y2==y1:
-            return 1
+            return True
     if coteAVerifier==2:#bas droite
         for i in range(y2-y1):
             X2-=1
             Y2-=1
         if X2==x1 and Y2==y1:
-            return 1
+            return True
     if coteAVerifier==3:#haut gauche
         for i in range(y1-y2):
             X2+=1
             Y2+=1
         if X2==x1 and Y2==y1:
-            return 1
-    return 0
+            return True
+    return False
 
+#Permet d'utiliser le fou.
 def fou(y1,x1,y2,x2):
     coteAVerifier=-1
     if y2<y1 and x2<x1:
@@ -216,7 +145,7 @@ def fou(y1,x1,y2,x2):
         coteAVerifier=1
     if y2>y1 and x2>x1:
         coteAVerifier=2
-    if verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier)==1:
+    if verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier):
         mouvementPiece(y1,x1,y2,x2)
         return 1
     return 0
@@ -229,7 +158,6 @@ def verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier):#0 haut dr
     if coteAVerifier == 0:  
         print("0")
         for i in range (1,y1-y2): #vérification en diagonale droit vers le haut
-            print("jellad est pd",i,y1-y2,y1+i,x1+i)
             if verifCouleur(y1-i,x1+i) !='Vide' and y1-i !=y1 and x1+i!=x1:
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
