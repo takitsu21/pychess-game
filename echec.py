@@ -44,6 +44,7 @@ def verifCoord(coordX,coordY):
     if coordX <0 or coordX >8 or  coordY <0 or coordY >8:
         return False
     return True
+
 #Determine la couleur de la pièce dans des coordonnées précis. Renvoie la couleur 'vide' quand il n'y a pas de pièce.
 def verifCouleur(y,x):
     if plateau[y][x].islower():
@@ -134,6 +135,18 @@ def estDiagonale(y1,x1,y2,x2,coteAVerifier):
             return True
     return False
 
+def estHorizontale(x1,x2,coteAVerifier):
+    X2=x2
+    if coteAVerifier==1:#gauche
+        for i in range(x1-x2):
+            X2+=1
+    else:#droite
+        for i in range(x2-x1):
+            X2-=1
+    if X2==x1:
+        return True
+    return False
+
 #Permet d'utiliser le fou.
 def fou(y1,x1,y2,x2):
     coteAVerifier=-1
@@ -145,13 +158,33 @@ def fou(y1,x1,y2,x2):
         coteAVerifier=1
     if y2>y1 and x2>x1:
         coteAVerifier=2
-    if verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier):
+    if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier):
         mouvementPiece(y1,x1,y2,x2)
         return 1
     return 0
 
-def reine():
-    return "slt g des boobs"
+#permet d'utiliser la reine
+def reine(y1,x1,y2,x2):
+    coteAVerifier=-1
+    if y2<y1 and x2<x1:
+        coteAVerifier=3
+    if y2<y1 and x2>x1:
+        coteAVerifier=0
+    if y2>y1 and x2<x1:
+        coteAVerifier=1
+    if y2>y1 and x2>x1:
+        coteAVerifier=2
+    if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier):
+        mouvementPiece(y1,x1,y2,x2)
+        return 1
+    if y2==y1 and x2<x1:#gauche
+        coteAVerifier=1
+    if y2==y1 and x2>x1:#droite
+        coteAVerifier=0
+    if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideHonrizontal(y1,x1,y2,x2,coteAVerifier)==1 and estHorizontale(x1,x2,coteAVerifier):
+        mouvementPiece(y1,x1,y2,x2)
+        return 1
+    return 0
 
 #Permet de voir si un déplacement est valide sur les diagonales
 def verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier):#0 haut droit 1 bas gauche 2 bas droit 3 haut gauche
@@ -189,13 +222,13 @@ def verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier):#0 haut dr
 #Permet de voir si un déplacement est valide sur les côtés
 def verificationDeplacementValideHonrizontal(y1,x1,y2,x2,coteAVerifier):
     if coteAVerifier == 0:
-     for i in range((y2-y1)+1): #vérification à droite du roi
-        if verifCouleur(y1+i,x1) !='Vide' and y1+i !=y1 and x1+i!=x1:
+        for i in range(1,x2-x1): #vérification à droite
+            if verifCouleur(y1,x1+i) !='Vide' and y1==y2 and x1+i!=x1:
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
     else:    
-        for i in range ((y1-y2)+1): #vérification à gauche du roi
-             if verifCouleur(y1-i,x1) !='Vide' and y1+i !=y1 and x1+i!=x1:
+        for i in range (1,x1-x2): #vérification à gauche
+             if verifCouleur(y1,x1-i) !='Vide' and y1==y2 and x1-i!=x1:
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0 
     return 1
