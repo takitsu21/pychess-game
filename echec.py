@@ -3,11 +3,12 @@
 
 """
 Created on Wed Aug 22 00:31:34 2018
-
 @author: Ralagane,Taki
+Jeu d'échec
 """
-global continuerPartie
+#----------------Init plateau de jeu------------------#
 
+global continuerPartie
 plateau=[['t', 'c', 'f', 'k', 'q', 'f', 'c', 't'],
  ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
  ['.', '.', '.', '.', '.', '.', '.','.'] ,
@@ -17,8 +18,8 @@ plateau=[['t', 'c', 'f', 'k', 'q', 'f', 'c', 't'],
  ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
  ['T', 'C', 'F', 'K', 'Q', 'F', 'C', 'T']]
 
-
-
+#---------------------------------------------------------------------------------------------------#
+#---------------------Fonctions utile au bon fonctionnement de l'échiquier--------------------------#
 
 #Affiche le plateau dans le terminal.
 def affichePlateau():
@@ -75,36 +76,6 @@ def verifPiece(y,x):
         return 6
     return 0    #case vide
 
-#Permet de faire bouger le pion. N'exécute pas pour le moment la prise en passant.
-def pion(y1,x1,y2,x2):
-    if verifCoord(y2,x2):
-        if x2==x1 and verifPiece(y2,x2)==0 and verifCouleur(y1,x1)=='Blanc':#Avancer tout droit blanc
-            if y1==6 and y2+2==y1:#Avance de 2 blanc
-                mouvementPiece(y1,x1,y2,x2)
-                return 1
-            elif y2+1==y1 :#Avance de 1 blanc
-                mouvementPiece(y1,x1,y2,x2)
-                return 1
-        elif x2==x1 and verifPiece(y2,x2)==0 and verifCouleur(y1,x1)=='Noir':#Avancer tout droit noir
-            if y1==1 and y2-2==y1:#Avance de 2 noir
-                mouvementPiece(y1,x1,y2,x2)
-                return 1
-            elif y2-1==y1:#Avance de 1 noir
-                mouvementPiece(y1,x1,y2,x2)
-                return 1
-        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1  and x2==x1+1 :#Manger piece noir droite
-            mouvementPiece(y1,x1,y2,x2)
-            return 1
-        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1+1  and x2==x1+1 :#Manger piece blanche droite
-            mouvementPiece(y1,x1,y2,x2)
-            return 1
-        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1  and x2==x1-1 :#Manger piece noir gauche
-            mouvementPiece(y1,x1,y2,x2)
-            return 1
-        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1+1  and x2==x1-1 :#Manger piece blanche gauche
-            mouvementPiece(y1,x1,y2,x2)
-    return 0
-          
 #Verifie si la position y2 et x2 sont bien sur la diagonale de la piece selectionner
 def estDiagonale(y1,x1,y2,x2,coteAVerifier):
     Y2=y2
@@ -147,76 +118,31 @@ def estHorizontale(x1,x2,coteAVerifier):
         return True
     return False
 
-#Permet d'utiliser le fou.
-def fou(y1,x1,y2,x2):
-    coteAVerifier=-1
-    if y2<y1 and x2<x1:
-        coteAVerifier=3
-    if y2<y1 and x2>x1:
-        coteAVerifier=0
-    if y2>y1 and x2<x1:
-        coteAVerifier=1
-    if y2>y1 and x2>x1:
-        coteAVerifier=2
-    if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier):
-        mouvementPiece(y1,x1,y2,x2)
-        return 1
-    return 0
-
-#permet d'utiliser la reine
-def reine(y1,x1,y2,x2):
-    coteAVerifier=-1
-    if y2<y1 and x2<x1:
-        coteAVerifier=3
-    if y2<y1 and x2>x1:
-        coteAVerifier=0
-    if y2>y1 and x2<x1:
-        coteAVerifier=1
-    if y2>y1 and x2>x1:
-        coteAVerifier=2
-    if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier):
-        mouvementPiece(y1,x1,y2,x2)
-        return 1
-    if y2==y1 and x2<x1:#gauche
-        coteAVerifier=1
-    if y2==y1 and x2>x1:#droite
-        coteAVerifier=0
-    if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideHonrizontal(y1,x1,y2,x2,coteAVerifier)==1 and estHorizontale(x1,x2,coteAVerifier):
-        mouvementPiece(y1,x1,y2,x2)
-        return 1
-    return 0
-
 #Permet de voir si un déplacement est valide sur les diagonales
 def verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier):#0 haut droit 1 bas gauche 2 bas droit 3 haut gauche
     if coteAVerifier == 0:  
-        print("0")
         for i in range (1,y1-y2): #vérification en diagonale droit vers le haut
             if verifCouleur(y1-i,x1+i) !='Vide' and y1-i !=y1 and x1+i!=x1:
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
         return 1
     if coteAVerifier == 1:
-        print("1")
         for i in range(1,y2-y1): #vérification en diagonale gauche vers le bas
             if verifCouleur(y1-i,x1-i) != 'Vide' and y1-i != y1 and x1-i !=x1: 
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
         return 1
     if coteAVerifier == 2:
-        print("2")
         for i in range(1,y2-y1): #Vérification en diagonale droit  vers le bas
             if verifCouleur(y1+i,x1-i) != 'Vide' and y1+i != y1 and x1-i !=x1: 
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
         return 1
     if coteAVerifier == 3:
-        print("3")
         for i in range (1,y1-y2): #Vérification en diagonale gauche vers le haut
-            print("test",i,y1-y2)
             if verifCouleur(y1-i,x1-i)!= 'Vide' and y1-i != y1 and x1-i !=x1: 
-                print("Une pièce est sur le chemin, le déplacement ne peut se faire.",i)
+                print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return 0
-        
         return 1
     
 #Permet de voir si un déplacement est valide sur les côtés
@@ -258,8 +184,7 @@ def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
             return 0
         if verifPiece(y1+i,x1) =="t" and verifCouleur(y1+i,x1) != couleurDuRoi:
             print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
-            return 0
-        
+            return 0  
     for i in range (y1+1): #vérification à gauche du roi
          if verifCouleur(y1-i,x1) == couleurDuRoi and y1-i !=y1: #Une pièce protège le roi
             break
@@ -269,7 +194,6 @@ def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
          if verifPiece(y1-i,x1) =="t" and verifCouleur(y1-i,x1) != couleurDuRoi:
             print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
             return 0
-        
     for i in range ((7-y1)+1): #vérification en diagonale droit vers le haut
         if verifCouleur(y1+i,x1+i) == couleurDuRoi and y1+i !=y1 and x1+i!=x1: #Une pièce protège le roi
             break
@@ -279,7 +203,6 @@ def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
         if verifPiece(y1+i,x1+i) =="t" and verifCouleur(y1+i,x1+i) != couleurDuRoi:
             print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
             return 0
-        
     for i in range(y1+1): #vérification en diagonale gauche vers le bas
         if verifCouleur(y1-i,x1-i) == couleurDuRoi and y1-i != y1 and x1-i !=x1: #Une pièce protège le roi
             break
@@ -289,7 +212,6 @@ def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
         if verifPiece(y1-i,x1-i) =="t" and verifCouleur(y1-i,x1-i) != couleurDuRoi:
             print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
             return 0
-    
     for i in range (y1+1): #Vérification en diagonale gauche vers le haut
         if verifCouleur(y1-i,x1+i) == couleurDuRoi and y1-i != y1 and x1+i !=x1: #Une pièce protège le roi
             break
@@ -299,7 +221,6 @@ def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
         if verifPiece(y1-i,x1+i) =="t" and verifCouleur(y1-i,x1+i) != couleurDuRoi:
             print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
             return 0
-    
     for i in range((7-y1)+1): #Vérification en diagonale droit  vers le bas
         if verifCouleur(y1+i,x1-i) == couleurDuRoi and y1+i != y1 and x1-i !=x1: #Une pièce protège le roi
             break
@@ -309,7 +230,6 @@ def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
         if verifPiece(y1+i,x1-i) =="t" and verifCouleur(y1+i,x1-i) != couleurDuRoi:
             print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
             return 0
-    
     for i in range (y1 +1) : #Vérification haut du roi
         if verifCouleur(y1-i,x1) == couleurDuRoi and y1-i !=y1: #Une pièce protège le roi
             break
@@ -328,7 +248,79 @@ def verificationDeplacementValideDuRoi(y1,x1,y2,x2):
         if verifPiece(y1+i,x1) =="t" and verifCouleur(y1+i,x1) != couleurDuRoi:
             print("Le roi ne peut pas se déplacer, car la tour restraint ses déplacements.")
             return 0
-    return 1    
+    return 1  
+
+#---------------------------------------------------------------#
+#---------------------Fonctions des pièces----------------------#
+    
+#Permet de faire bouger le pion. N'exécute pas pour le moment la prise en passant.
+def pion(y1,x1,y2,x2):
+    if verifCoord(y2,x2):
+        if x2==x1 and verifPiece(y2,x2)==0 and verifCouleur(y1,x1)=='Blanc':#Avancer tout droit blanc
+            if y1==6 and y2+2==y1:#Avance de 2 blanc
+                mouvementPiece(y1,x1,y2,x2)
+                return 1
+            elif y2+1==y1 :#Avance de 1 blanc
+                mouvementPiece(y1,x1,y2,x2)
+                return 1
+        elif x2==x1 and verifPiece(y2,x2)==0 and verifCouleur(y1,x1)=='Noir':#Avancer tout droit noir
+            if y1==1 and y2-2==y1:#Avance de 2 noir
+                mouvementPiece(y1,x1,y2,x2)
+                return 1
+            elif y2-1==y1:#Avance de 1 noir
+                mouvementPiece(y1,x1,y2,x2)
+                return 1
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1  and x2==x1+1 :#Manger piece noir droite
+            mouvementPiece(y1,x1,y2,x2)
+            return 1
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1+1  and x2==x1+1 :#Manger piece blanche droite
+            mouvementPiece(y1,x1,y2,x2)
+            return 1
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1-1  and x2==x1-1 :#Manger piece noir gauche
+            mouvementPiece(y1,x1,y2,x2)
+            return 1
+        elif verifPiece(y2,x2)!= 0 and verifCouleur(y1,x1)!=verifCouleur(y2,x2) and y2==y1+1  and x2==x1-1 :#Manger piece blanche gauche
+            mouvementPiece(y1,x1,y2,x2)
+    return 0
+
+#Permet d'utiliser le fou.
+def fou(y1,x1,y2,x2):
+    coteAVerifier=-1
+    if y2<y1 and x2<x1:
+        coteAVerifier=3
+    if y2<y1 and x2>x1:
+        coteAVerifier=0
+    if y2>y1 and x2<x1:
+        coteAVerifier=1
+    if y2>y1 and x2>x1:
+        coteAVerifier=2
+    if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier):
+        mouvementPiece(y1,x1,y2,x2)
+        return 1
+    return 0
+
+#permet d'utiliser la reine
+def reine(y1,x1,y2,x2):
+    coteAVerifier=-1
+    if y2<y1 and x2<x1:
+        coteAVerifier=3
+    if y2<y1 and x2>x1:
+        coteAVerifier=0
+    if y2>y1 and x2<x1:
+        coteAVerifier=1
+    if y2>y1 and x2>x1:
+        coteAVerifier=2
+    if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier):
+        mouvementPiece(y1,x1,y2,x2)
+        return 1
+    if y2==y1 and x2<x1:#gauche
+        coteAVerifier=1
+    if y2==y1 and x2>x1:#droite
+        coteAVerifier=0
+    if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideHonrizontal(y1,x1,y2,x2,coteAVerifier)==1 and estHorizontale(x1,x2,coteAVerifier):
+        mouvementPiece(y1,x1,y2,x2)
+        return 1
+    return 0  
 
 # Permet de faire bouger le roi tout en regardant s'il peut bouger sans prolbème.
 def roi(y1,x1,y2,x2):
@@ -370,7 +362,6 @@ def cavalier(y1,x1,y2,x2):
          print("Le déplacement n'est pas valide, le cavalier se déplace en L : deux cases devant lui et un case sur la gauche ou la droite.")
          return 0
         
-
 #Permet de faire bouger la tour en respectant les contraintes. Ne fait pas le roc.
 def tour(y1,x1,y2,x2):    
     if y1==y2 or x1==x2: #On regarde d'abord si le déplacement correspond à celle d'une tour 
@@ -410,6 +401,9 @@ def tour(y1,x1,y2,x2):
     else:
         print("Le coordonées données ne respectent pas les caractéristiques de la tour : la tour se déplace soit horizontalement ou verticalement.")
         return 0
+
+#-----------------------------------------------------------#
+#---------------Fonctions qui gère la partie----------------#
 
 #Permet de faire appel aux bonnes fonctions quand le joueur souhaite bouger une pièce.
 def executerFonctionPiece(y,x,y1,x1):
@@ -520,8 +514,10 @@ def partie():
             print("Les coordonnées ne sont pas comprises dans l\'échiquier.")
         affichePlateau()
 
-            
+#----------------------------------------------#
+#----------------Lance la partie---------------#          
         
 if __name__ =='__main__':
     partie()      
-        
+
+#----------------------------------------------#
