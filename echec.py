@@ -106,7 +106,7 @@ def estDiagonale(y1,x1,y2,x2,coteAVerifier):
             return True
     return False
 
-def estHorizontale(x1,x2,coteAVerifier):
+def estHorizontal(x1,x2,coteAVerifier):
     X2=x2
     if coteAVerifier==1:#gauche
         for i in range(x1-x2):
@@ -115,6 +115,18 @@ def estHorizontale(x1,x2,coteAVerifier):
         for i in range(x2-x1):
             X2-=1
     if X2==x1:
+        return True
+    return False
+
+def estVertical(y1,y2,coteAVerifier):
+    Y2=y2
+    if coteAVerifier==1:#haut
+        for i in range(y1-y2):
+            Y2+=1
+    else:
+        for i in range(y2-y1):#bas
+            Y2-=1
+    if Y2==y1:
         return True
     return False
 
@@ -146,15 +158,15 @@ def verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier):#0 haut dr
         return True
     
 #Permet de voir si un déplacement est valide sur les côtés
-def verificationDeplacementValideHonrizontal(y1,x1,y2,x2,coteAVerifier):
+def verificationDeplacementValideHorizontal(y1,x1,y2,x2,coteAVerifier):
     if coteAVerifier == 0:
         for i in range(1,x2-x1): #vérification à droite
-            if verifCouleur(y1,x1+i) !='Vide' and y1==y2 and x1+i!=x1:
+            if verifPiece(y1,x1+i)!=False and y1==y2:
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return False
     else:    
         for i in range (1,x1-x2): #vérification à gauche
-             if verifCouleur(y1,x1-i) !='Vide' and y1==y2 and x1-i!=x1:
+             if verifPiece(y1,x1-i)!=False and y1==y2:
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return False 
     return True
@@ -162,15 +174,15 @@ def verificationDeplacementValideHonrizontal(y1,x1,y2,x2,coteAVerifier):
 #Permet de voir si un déplacement est valide sur les en hat et en bas
 def  verificationDeplacementValideVertical(y1,x1,y2,x2,coteAVerifier):
     if coteAVerifier == 0:
-        for i in range ((y1-y2) +1) : #Vérification haut 
-            if verifCouleur(y1+i,x1) !='Vide' and y1+i !=y1 :
+        for i in range(1,y1-y2):#haut
+            if verifCouleur(y1-i,x1)!='Vide' and x1==x2 :
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
                 return False
     else :
-        for i in range ((y2-y1) +1): #Vérification bas
-            if verifCouleur(y1+i,x1) !='Vide' and y1+i !=y1:
+        for i in range (1,y2-y1):#bas
+             if verifCouleur(y1+i,x1)!='Vide' and x1==x2:
                 print("Une pièce est sur le chemin, le déplacement ne peut se faire.")
-                return False
+                return False 
     return True    
 
 #permet de voir si le roi à le champ libre pour se déplacer
@@ -312,14 +324,26 @@ def reine(y1,x1,y2,x2):
         coteAVerifier=2
     if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideDiagonale(y1,x1,y2,x2,coteAVerifier)==1 and estDiagonale(y1,x1,y2,x2,coteAVerifier):
         mouvementPiece(y1,x1,y2,x2)
+        print('diagonale')
         return True
-    if y2==y1 and x2<x1:#gauche
-        coteAVerifier=1
-    if y2==y1 and x2>x1:#droite
-        coteAVerifier=0
-    if verifCouleur(y2,x2)!=verifCouleur(y1,x1) and verificationDeplacementValideHonrizontal(y1,x1,y2,x2,coteAVerifier)==1 and estHorizontale(x1,x2,coteAVerifier):
-        mouvementPiece(y1,x1,y2,x2)
-        return True    
+    if y2==y1:#horizontal
+        if x2<x1:#gauche
+            coteAVerifier=1
+        if x2>x1:#droite
+            coteAVerifier=0
+        if  verificationDeplacementValideHorizontal(y1,x1,y2,x2,coteAVerifier)==True and verifCouleur(y2,x2)!=verifCouleur(y1,x1):
+            mouvementPiece(y1,x1,y2,x2)
+            print('horizontale')
+            return True  
+    if x1==x2:#vertical
+        if y2<y1:#haut:
+            coteAVerifier=1
+        if y2>y1:#bas
+            coteAVerifier=0
+        if verificationDeplacementValideVertical(y1,x1,y2,x2,coteAVerifier)==True and verifCouleur(y2,x2)!=verifCouleur(y1,x1):
+            mouvementPiece(y1,x1,y2,x2)
+            print('verticale')
+            return True   
     return False  
 
 # Permet de faire bouger le roi tout en regardant s'il peut bouger sans prolbème.
